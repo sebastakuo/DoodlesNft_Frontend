@@ -1,0 +1,49 @@
+/* Contenedor visual tipo card para la librería */
+.libreria-card {
+	background: linear-gradient(135deg, #181828 0%, #1a1a2e 100%);
+	border-radius: 18px;
+	box-shadow: 0 4px 32px 0 rgba(0,0,0,0.18);
+	padding: 2rem;
+	border: 1px solid #2c2c3a;
+}
+/* Botones estilo circular gris oscuro con icono blanco */
+.libreria-btn {
+	background: #444;
+	color: #fff;
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+	border: none;
+	outline: none;
+	transition: background 0.2s;
+	cursor: pointer;
+}
+.libreria-btn:hover {
+	background: #222;
+}
+/* Estilos visuales para la librería */
+.aspect-square {
+	aspect-ratio: 1/1;
+}
+.cursor-zoom-in {
+	cursor: zoom-in;
+}
+.shadow-lg {
+	box-shadow: 0 4px 24px 0 rgba(0,0,0,0.15);
+}
+.shadow-2xl {
+	box-shadow: 0 8px 32px 0 rgba(0,0,0,0.25);
+}
+.transition {
+	transition: all 0.2s;
+}
+.rounded-xl {
+	border-radius: 1rem;
+}
+.border-4 {
+	border-width: 4px;
+}

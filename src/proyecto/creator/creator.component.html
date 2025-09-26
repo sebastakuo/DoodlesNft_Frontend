@@ -1,0 +1,324 @@
+<div class="main-container">
+    <main class="main-grid">
+        <!-- Column 1: Upload and Working Modes -->
+        <div class="upload-column">
+            <!-- Step 1: Upload Image -->
+            <div class="glass-card p-6 rounded-2xl">
+                <h2 class="step-header">
+                    <span class="step-header-content">
+                        <span class="step-number step-number-1">1</span>
+                        Upload your base character
+                    </span>
+                    @if(baseImageURL()) {
+                    <button (click)="reset()" class="reset-btn" title="Start over">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-ccw">
+                            <path d="M3 2v6h6" />
+                            <path d="M21 12A9 9 0 0 0 6 5.3L3 8" />
+                        </svg>
+                    </button>
+                    }
+                </h2>
+
+                <!-- Unified Drop Zone / Image Preview -->
+                <div (click)="fileInput.click()" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)" class="drop-zone">
+                    @if (baseImageURL()) {
+                        <img [src]="baseImageURL()" alt="Character preview" class="image-preview" />
+                        <div class="drop-zone-overlay">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="drop-zone-icon"><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"/><line x1="16" x2="22" y1="5" y2="5"/><line x1="19" x2="19" y1="2" y2="8"/><path d="m15 11 4.5-4.5M21.5 11.5 17 7"/></svg>
+                            <p class="drop-zone-text">Click or Drag to Replace</p>
+                        </div>
+                    } @else {
+                        <svg xmlns="http://www.w3.org/2000/svg" class="drop-zone-placeholder-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <p class="drop-zone-placeholder-text">Drag or select an image</p>
+                    }
+                </div>                @if (aiAnalysisData()) {
+                <div class="global-rules-container">
+                    <h3 class="global-rules-title">Global Rules</h3>
+                    <div class="global-rules-grid">
+                        <strong class="global-rules-label">Character:</strong>
+                        <span class="global-rules-value" [title]="getGlobalAttributeDescription('character')">{{getGlobalAttributeDescription('character')}}</span>
+                        <strong class="global-rules-label">Pose:</strong>
+                        <span class="global-rules-value" [title]="getGlobalAttributeDescription('pose')">{{getGlobalAttributeDescription('pose')}}</span>
+                        <strong class="global-rules-label">Art Style:</strong>
+                        <span class="global-rules-value" [title]="getGlobalAttributeDescription('style')">{{getGlobalAttributeDescription('style')}}</span>
+                    </div>
+                </div>
+                }
+
+                <div class="file-input-wrapper w-full">
+                    <button type="button" class="file-input-btn">
+                        {{ baseImageURL() ? 'Change Image' : 'Select File' }}
+                    </button>
+                    <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/png, image/jpeg, image/webp">
+                </div>
+            </div>
+
+            <!-- Step 2: Working Mode Selection -->
+            <div class="glass-card p-6 rounded-2xl" [class.opacity-50]="isAttributesCardDisabled()" [class.pointer-events-none]="isAttributesCardDisabled()">
+                <h2 class="step-header">
+                    <span class="step-header-content">
+                        <span class="step-number step-number-2">2</span>
+                        Working Mode
+                    </span>
+                    @if(workingMode() === 'full') {
+                        <span class="mode-badge mode-badge-full">Full Variation Active</span>
+                    } @else {
+                        <span class="mode-badge mode-badge-base">Base Character Active</span>
+                    }
+                </h2>
+                
+                <div class="mode-grid">
+                    <!-- Full Variation Mode -->
+                    <button (click)="setWorkingMode('full')" 
+                            [disabled]="isGenerating() || isAnalyzing()"
+                            class="mode-btn mode-btn-full"
+                            [class.active]="workingMode() === 'full'">
+                        <div class="mode-radio-container">
+                            <div class="mode-radio">
+                                @if(workingMode() === 'full') {
+                                <div class="mode-radio-dot"></div>
+                                }
+                            </div>
+                            <h3 class="mode-title">Full Variation</h3>
+                        </div>
+                        <p class="mode-description">
+                            Up to 4 attributes for complete character transformation.
+                        </p>
+                    </button>
+                    
+                    <!-- Base Character Mode -->
+                    <button (click)="setWorkingMode('base')" 
+                            [disabled]="isGenerating() || isAnalyzing()"
+                            class="mode-btn mode-btn-base"
+                            [class.active]="workingMode() === 'base'">
+                        <div class="mode-radio-container">
+                            <div class="mode-radio">
+                                @if(workingMode() === 'base') {
+                                <div class="mode-radio-dot"></div>
+                                }
+                            </div>
+                            <h3 class="mode-title">Base Character</h3>
+                        </div>
+                        <p class="mode-description">
+                            Clean base: only skin, eyes, mouth. White background.
+                        </p>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Column 2: Attributes -->
+        <div class="attributes-column">
+            <!-- Step 3: Attributes -->
+            <div class="glass-card p-6 rounded-2xl relative" [class.opacity-50]="isAttributesCardDisabled()" [class.pointer-events-none]="isAttributesCardDisabled()">
+                <h2 class="step-header">
+                    <span class="step-header-content">
+                        <span class="step-number step-number-3">3</span>
+                        Define Attributes
+                    </span>
+                </h2>
+                <div class="modification-info">
+                    <span>Modification: {{ modificationCount() }}/{{ maxModificationsAllowed() }}</span>
+                    @if(workingMode() === 'base' && modificationCount() === 0){
+                        <span class="tip-base">Tip: Base mode creates clean characters with only essential traits.</span>
+                    } @else if(workingMode() === 'full' && showSmartTip()){
+                        <span class="tip-full">Tip: Modify fewer attributes for highest precision.</span>
+                    }
+                </div>
+                @if (isAnalyzing()) {
+                <div class="loader-overlay">
+                    <div class="loader"></div>
+                    <p class="loader-text">Analyzing image...</p>
+                </div>
+                }
+
+                <div class="attributes-grid">
+                    @for (attr of attributes(); track attr.key) {
+                    <div class="attribute-item">
+                        <div class="attribute-button-row">
+                            <button (click)="toggleAttribute(attr.key)" 
+                                    class="style-toggle-btn" 
+                                    [class.active]="attr.isActive"
+                                    [class.opacity-50]="workingMode() === 'base' && !['skinType', 'eyes', 'mouth'].includes(attr.key)"
+                                    [class.cursor-not-allowed]="workingMode() === 'base' && !['skinType', 'eyes', 'mouth'].includes(attr.key)">
+                                {{ attr.label }}
+                                @if(workingMode() === 'base' && attr.isActive && !['skinType', 'eyes', 'mouth'].includes(attr.key)) {
+                                    <span class="ml-1 text-xs">🔒</span>
+                                } @else if(workingMode() === 'base' && attr.isActive && ['skinType', 'eyes', 'mouth'].includes(attr.key)) {
+                                    <span class="ml-1 text-xs">✨</span>
+                                }
+                            </button>
+                            
+                            @if (!attr.isActive) {
+                            <div class="attribute-controls">
+                                @if(workingMode() === 'base' && !['skinType', 'eyes', 'mouth'].includes(attr.key)) {
+                                    <!-- Mostrar valor predeterminado para atributos bloqueados en modo base -->
+                                    <div class="predefined-value">
+                                        @if(attr.key === 'background') {
+                                            Auto: Neutral white background
+                                        } @else if(attr.key === 'clothing') {
+                                            Auto: plain white tank top
+                                        } @else {
+                                            Auto: bald
+                                        }
+                                    </div>
+                                } @else {
+                                    <!-- Interfaz normal para atributos modificables -->
+                                    <button (click)="refInput.click()" class="reference-upload-btn" [title]="'Upload reference for ' + attr.label">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                                    </button>
+                                    <input #refInput type="file" class="hidden" (change)="onReferenceFileSelected($event, attr.key)" accept="image/png, image/jpeg, image/webp">
+
+                                    @if (attr.referencePreviewUrl) {
+                                    <div class="reference-preview-container">
+                                        <img [src]="attr.referencePreviewUrl" class="reference-preview-img">
+                                        <button (click)="deleteReference(attr.key)" class="reference-delete-btn">&times;</button>
+                                    </div>
+                                    }
+                                    
+                                    <input type="text" [placeholder]="'Eg: ' + attr.label + '...'" [value]="attr.promptValue" (input)="updateAttributePrompt(attr.key, $event)" class="attribute-input">
+                                }
+                            </div>
+                            }
+                        </div>
+                        
+                        @if (attr.isActive && attr.aiKeyword) {
+                          <div class="ai-keyword-description">
+                            <span class="ai-keyword-tag" [title]="attr.aiKeyword">{{ attr.aiKeyword }}</span>
+                          </div>
+                        }
+                    </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Variation Count Selector -->
+            <div class="variation-selector">
+                <label class="variation-label">Number of Variations:</label>
+                <div class="variation-buttons">
+                    @for (count of [1, 2, 3, 4]; track count) {
+                    <button (click)="setVariationCount(count)" 
+                            [disabled]="isGenerating()"
+                            class="variation-btn"
+                            [class.variation-btn-active]="variationCount() === count"
+                            [class.variation-btn-inactive]="variationCount() !== count">
+                        {{count}}
+                    </button>
+                    }
+                </div>
+            </div>
+        
+            <!-- Generate Button -->
+            <button (click)="onGenerateClick()" [disabled]="isGenerateButtonDisabled()" class="generate-btn">
+                @if (isGenerating()) {
+                <div class="generate-spinner"></div>
+                <span>Generating...</span>
+                } @else {
+                <span>Generate NFT</span>
+                }
+            </button>
+        </div>
+
+        <!-- Column 3: Results -->
+        <div class="results-column">
+            <!-- Results -->
+            <div class="glass-card p-6 rounded-2xl results-container">
+            <h2 class="results-title">Generated Results</h2>
+            <div class="results-grid">
+                @if (generatedResults().length === 0) {
+                <div class="results-empty">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="results-empty-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <p>Your NFT collection will appear here.</p>
+                </div>
+                } @else {
+                    @for (result of generatedResults(); track result.id) {
+                    <div class="result-item">
+                        <div class="result-content">
+                            @if(result.isLoading) {
+                            <div class="loader"></div>
+                            } @else if (result.imageUrl) {
+                            <img [src]="result.imageUrl" (click)="openModal(result.imageUrl)" class="result-image" />
+                            <div class="result-actions">
+                                <button (click)="downloadImage($event, result.imageUrl)" class="result-btn" title="Download Image">
+                                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                </button>
+                                <button (click)="selectAsBaseImage(result.imageUrl)" class="result-btn" title="Select as Base Image">
+                                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-square"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                                </button>
+                            </div>
+                            } @else if (result.error) {
+                            <p class="result-error">{{ result.error }}</p>
+                            }
+                        </div>
+                    </div>
+                    }
+                }
+            </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Image Modal -->
+@if (modalImageUrl()) {
+<div (click)="closeModal()" class="modal-backdrop">
+    <!-- Previous Button -->
+    @if(viewableResults().length > 1) {
+    <button (click)="prevModalImage(); $event.stopPropagation()" class="modal-nav-btn modal-prev-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+    }
+
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <img [src]="modalImageUrl()" alt="Enlarged image" class="modal-image">
+        <button (click)="closeModal()" class="modal-close-btn">&times;</button>
+    </div>
+
+    <!-- Next Button -->
+    @if(viewableResults().length > 1) {
+    <button (click)="nextModalImage(); $event.stopPropagation()" class="modal-nav-btn modal-next-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+    }
+</div>
+}
+
+<!-- Notification Toast -->
+@if (toastMessage()) {
+<div class="toast">
+    <p>{{ toastMessage() }}</p>
+</div>
+}
+
+<!-- Floating Suggestion Message -->
+@if (showFloatingSuggestion() && !baseImageURL()) {
+<div class="floating-suggestion">
+    <div class="floating-suggestion-content">
+        <button (click)="closeSuggestion()" class="floating-suggestion-close">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" x2="6" y1="6" y2="18"></line>
+                <line x1="6" x2="18" y1="6" y2="18"></line>
+            </svg>
+        </button>
+        <div class="flex items-start gap-3">
+            <div class="flex-shrink-0 mt-0.5">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-400">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+            </div>
+            <div>
+                <h3 class="text-yellow-300 font-semibold text-sm mb-2">✨ Sugerencia para Personaje Base ✨</h3>
+                <p class="text-gray-300 text-sm leading-relaxed">
+                    Tu personaje base debe comenzar <strong class="text-white">sin atributos adicionales</strong> (sin ropa, accesorios ni fondos).<br>
+                    Solo mantén las <strong class="text-white">expresiones básicas de ojos y boca</strong>.<br>
+                    <span class="text-yellow-200">De esta forma podrás construir y combinar traits de manera más limpia, consistente y precisa.</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+}

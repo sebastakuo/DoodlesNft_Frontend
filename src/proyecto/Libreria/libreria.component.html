@@ -1,0 +1,27 @@
+<div class="p-6">
+	<div class="libreria-card">
+		<h2 class="text-2xl font-bold mb-4">Librería de Imágenes Generadas</h2>
+		<div *ngIf="imagenes().length === 0" class="text-center text-gray-400 py-12">No hay imágenes guardadas aún.</div>
+		<div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+			<div *ngFor="let img of imagenes(); let i = index" class="relative aspect-square bg-gray-900 rounded-xl overflow-hidden group shadow-lg">
+				<img [src]="img" alt="Imagen generada" class="w-full h-full object-cover transition-transform duration-200 cursor-pointer" (click)="abrirZoom(img)" />
+				<div class="absolute top-2 right-2 flex flex-col gap-2 items-end">
+					<button (click)="eliminarImagen(i)" class="libreria-btn" title="Eliminar">
+						<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+					</button>
+					<a [href]="img" download="imagen-nft.png" class="libreria-btn" title="Descargar">
+						<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 16v-8m0 8l-4-4m4 4l4-4"/></svg>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal de Zoom -->
+	<div *ngIf="zoomImg()" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50" (click)="cerrarZoom()">
+		<img [src]="zoomImg()" alt="Zoom" class="max-w-full max-h-[90vh] rounded-xl shadow-2xl" (click)="$event.stopPropagation()" />
+		<button (click)="cerrarZoom(); $event.stopPropagation()" class="absolute top-8 right-8 bg-white/80 hover:bg-red-500 text-gray-700 hover:text-white rounded-full p-2 shadow-lg transition" title="Cerrar">
+			<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+		</button>
+	</div>
+</div>

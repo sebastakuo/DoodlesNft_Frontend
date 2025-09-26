@@ -1,0 +1,27 @@
+<div class="container mx-auto flex justify-between items-center gap-4 p-1">
+    <div class="flex items-center gap-8">
+        <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-gray-200">
+            NFT CREATOR
+        </h1>
+        <!-- Botones de navegación -->
+        <nav class="flex gap-4">
+            <a 
+                routerLink="/inicio" 
+                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 font-medium">
+                Inicio
+            </a>
+            <a 
+                routerLink="/creator" 
+                class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors duration-200 font-medium">
+                Custom
+            </a>
+            <a 
+                routerLink="/libreria" 
+                class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors duration-200 font-medium">
+                Librería
+            </a>
+        </nav>
+    </div>
+    <!-- Componente de Wallet en la esquina derecha -->
+    <app-wallet></app-wallet>
+</div>
