@@ -80,9 +80,15 @@ export class CreatorComponent implements OnInit {
   }
 
   showToast(message: string): void {
+    // Limpiar timeout anterior si existe
+    if ((this as any).toastTimeout) {
+      clearTimeout((this as any).toastTimeout);
+    }
+    
     this.toastMessage.set(message);
-    setTimeout(() => {
+    (this as any).toastTimeout = setTimeout(() => {
       this.toastMessage.set(null);
+      (this as any).toastTimeout = null;
     }, 3000);
   }
 
@@ -142,6 +148,16 @@ export class CreatorComponent implements OnInit {
       return;
     }
     
+    // Validar estado antes de proceder
+    if (this.isAnalyzing() || this.isGenerating()) {
+      this.showToast("Please wait for the current operation to finish.");
+      return;
+    }
+    
+    // Limpiar estado anterior
+    this.aiAnalysisData.set(null);
+    this.isAnalyzing.set(false);
+    
     // Mostrar mensaje de optimización
     this.showToast("🔄 Optimizando imagen para análisis...");
     
@@ -154,12 +170,12 @@ export class CreatorComponent implements OnInit {
         // Comprimir imagen para análisis más rápido
         const compressedBase64 = await this.compressImage(file, 1024, 0.8);
         this.base64ImageData.set(compressedBase64.split(',')[1]);
-        this.runImageAnalysis();
+        await this.runImageAnalysis();
       } catch (error) {
         console.error('Error compressing image:', error);
         // Fallback a imagen original si la compresión falla
         this.base64ImageData.set(imageUrl.split(',')[1]);
-        this.runImageAnalysis();
+        await this.runImageAnalysis();
       }
       
       this.cdr.detectChanges();
@@ -199,40 +215,67 @@ export class CreatorComponent implements OnInit {
 
   // --- AI Analysis ---
 
+  private analysisPromise: Promise<void> | null = null;
+
   async runImageAnalysis(): Promise<void> {
+    // Prevenir análisis simultáneos
+    if (this.analysisPromise) {
+      return this.analysisPromise;
+    }
+
     const base64 = this.base64ImageData();
     if (!base64) return;
 
-    this.isAnalyzing.set(true);
+    this.analysisPromise = this.performAnalysis(base64);
     
+    try {
+      await this.analysisPromise;
+    } finally {
+      this.analysisPromise = null;
+    }
+  }
+
+  private async performAnalysis(base64: string): Promise<void> {
+    // Siempre resetear estado antes de iniciar
+    this.isAnalyzing.set(false);
+    
+    // Pequeño delay para que la UI se actualice
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    this.isAnalyzing.set(true);
+    this.cdr.detectChanges();
+
     // Mostrar progreso paso a paso
-    setTimeout(() => {
+    const progressTimeout1 = setTimeout(() => {
       if (this.isAnalyzing()) {
         this.showToast('🤖 Analizando con IA... Esto puede tomar 30-60 segundos');
       }
     }, 3000);
 
-    setTimeout(() => {
+    const progressTimeout2 = setTimeout(() => {
       if (this.isAnalyzing()) {
         this.showToast('⏳ Análisis avanzado en progreso... Casi terminando');
       }
     }, 15000);
-    
-    this.geminiService.analyzeImage(base64).subscribe({
-      next: (analysis) => {
-        this.aiAnalysisData.set(analysis);
-        this.updateAttributeKeywords(analysis);
-        this.isAnalyzing.set(false);
-        this.showToast("✅ ¡Análisis completado con éxito!");
-        this.cdr.detectChanges();
-      },
-      error: (error) => {
-        console.error("Image analysis failed:", error);
-        this.showToast("❌ Error en análisis. Intenta con una imagen más pequeña.");
-        this.isAnalyzing.set(false);
-        this.cdr.detectChanges();
-      }
-    });
+
+    try {
+      const analysis = await this.geminiService.analyzeImage(base64).toPromise();
+      const aiResult = analysis?.result ?? analysis;
+      this.aiAnalysisData.set(aiResult);
+      this.updateAttributeKeywords(aiResult);
+      this.showToast("✅ ¡Análisis completado con éxito!");
+    } catch (error) {
+      console.error("Image analysis failed:", error);
+      this.showToast("❌ Error en análisis. Intenta con una imagen más pequeña.");
+    } finally {
+      // Limpiar timeouts
+      clearTimeout(progressTimeout1);
+      clearTimeout(progressTimeout2);
+      
+      // Siempre resetear en finally
+      this.isAnalyzing.set(false);
+      this.cdr.detectChanges();
+    }
   }
 
   private updateAttributeKeywords(analysis: AIAnalysisData): void {
@@ -505,11 +548,36 @@ export class CreatorComponent implements OnInit {
       return;
     }
 
-    // Set the new base image from the data URL
-    this.baseImageURL.set(imageUrl);
-    this.base64ImageData.set(imageUrl.split(',')[1]);
+    // Limpiar completamente el estado anterior
+    this.isAnalyzing.set(false);
+    this.aiAnalysisData.set(null); // Limpiar análisis anterior
+    
+    // Mostrar mensaje de optimización
+    this.showToast("🔄 Optimizando imagen para análisis...");
+    
+    try {
+      // Convertir data URL a blob para poder comprimirla
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      
+      // Crear un File object desde el blob
+      const file = new File([blob], 'generated-image.png', { type: 'image/png' });
+      
+      // Comprimir la imagen usando la misma función que handleFile
+      const compressedBase64 = await this.compressImage(file, 1024, 0.8);
+      
+      // Set the compressed image
+      this.baseImageURL.set(imageUrl); // Mostrar la original en UI
+      this.base64ImageData.set(compressedBase64.split(',')[1]); // Usar comprimida para análisis
+      
+    } catch (error) {
+      console.error('Error compressing selected image:', error);
+      // Fallback a imagen original si la compresión falla
+      this.baseImageURL.set(imageUrl);
+      this.base64ImageData.set(imageUrl.split(',')[1]);
+    }
 
-    // Reset all attributes to their default state
+    // Reset all attributes to their default state (sin AI keywords inicialmente)
     this.attributes.set(this.initializeAttributes());
     
     // Reset working mode to full
@@ -517,6 +585,8 @@ export class CreatorComponent implements OnInit {
     
     // Clear any previously uploaded reference images
     this.attributeReferences.set({});
+    
+    this.cdr.detectChanges();
     
     // Scroll to the top to see the new base image in the uploader
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -648,12 +718,41 @@ export class CreatorComponent implements OnInit {
   // --- UI Control ---
 
   reset(): void {
+    // Validar que no haya operaciones en curso
+    if (this.isAnalyzing() || this.isGenerating()) {
+      this.showToast('Please wait for the current operation to finish.');
+      return;
+    }
+    
+    // Resetear datos principales
     this.base64ImageData.set(null);
     this.baseImageURL.set(null);
     this.attributeReferences.set({});
     this.aiAnalysisData.set(null);
     this.attributes.set(this.initializeAttributes());
     this.workingMode.set('full');
-    // Keep generatedResults
+    
+    // Resetear flags de estado
+    this.isAnalyzing.set(false);
+    this.isGenerating.set(false);
+    
+    // Resetear UI
+    this.modalImageIndex.set(null);
+    this.toastMessage.set(null);
+    this.variationCount.set(1);
+    
+    // Limpiar timeout de toast si existe
+    if ((this as any).toastTimeout) {
+      clearTimeout((this as any).toastTimeout);
+      (this as any).toastTimeout = null;
+    }
+    
+    // Limpiar promise de análisis si existe
+    this.analysisPromise = null;
+    
+    // Forzar actualización
+    this.cdr.detectChanges();
+    
+    // Keep generatedResults (como estaba originalmente)
   }
 }
