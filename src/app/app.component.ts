@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from './proyecto/header/header.component';
-import { FooterComponent } from './proyecto/footer/footer.component';
+import { HeaderComponent } from './features/header/header.component';
+import { FooterComponent } from './features/footer/footer.component';
 import { HttpClientModule } from '@angular/common/http';
 
 @Component({

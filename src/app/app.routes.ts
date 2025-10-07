@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { CreatorComponent } from './proyecto/creator/creator.component';
-import { WalletComponent } from './proyecto/billetera/wallet.component';
-import { InicioComponent } from './proyecto/inicio/inicio.component';
-import { LibreriaComponent } from './proyecto/Libreria/libreria.component';
+import { CreatorComponent } from './features/creator/creator.component';
+import { WalletComponent } from './billetera/wallet.component';
+import { InicioComponent } from './features/inicio/inicio.component';
+import { LibreriaComponent } from './features/galeria/libreria.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'inicio', pathMatch: 'full' },

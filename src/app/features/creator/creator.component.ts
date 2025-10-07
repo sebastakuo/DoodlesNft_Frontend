@@ -1,9 +1,9 @@
 import { Component, ChangeDetectionStrategy, signal, computed, inject, ChangeDetectorRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { GeminiService } from '../../services/gemini.service';
+import { GeminiService } from '../../core/services/gemini.service';
 import { AIAnalysisData, Attribute, GeneratedResult, AttributeConfig, GlobalAttributeConfig } from '../../models';
-import { ATTRIBUTE_CONFIG, GLOBAL_ATTRIBUTE_CONFIG, MAX_MODIFICATIONS } from '../../config';
+import { ATTRIBUTE_CONFIG, GLOBAL_ATTRIBUTE_CONFIG, MAX_MODIFICATIONS } from '../../../config';
 
 @Component({
   selector: 'app-creator',

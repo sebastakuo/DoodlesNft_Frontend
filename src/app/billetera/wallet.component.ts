@@ -1,8 +1,8 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { WalletConnectService } from '../../services/walletconnect.service';
-import { HederaService } from '../../services/hedera.service';
+import { WalletConnectService } from '../core/services/walletconnect.service';
+import { HederaService } from '../core/services/hedera.service';
 
 @Component({
   selector: 'app-wallet',

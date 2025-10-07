@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { WalletComponent } from '../billetera/wallet.component';
+import { WalletComponent } from '../../billetera/wallet.component';
 import { RouterLink } from '@angular/router';
 
 @Component({

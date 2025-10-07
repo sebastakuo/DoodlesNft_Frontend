@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import SignClient from '@walletconnect/sign-client';
 import { WalletConnectModal } from '@walletconnect/modal';
-import { environment } from '../environments/environment';
-import { HEDERA_NAMESPACE } from '../config';
+import { environment } from '../../../environments/environment';
+import { HEDERA_NAMESPACE } from '../../../config';
 
 @Injectable({ providedIn: 'root' })
 export class WalletConnectService {

@@ -1,4 +1,4 @@
-import { AttributeConfig, GlobalAttributeConfig } from './models';
+import { AttributeConfig, GlobalAttributeConfig } from './app/models';
 
 export const MAX_MODIFICATIONS = 4;
 
