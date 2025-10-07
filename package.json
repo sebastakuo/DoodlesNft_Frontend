@@ -17,11 +17,6 @@
     "@angular/forms": "^20.3.2",
     "@angular/platform-browser": "^20.3.2",
     "@angular/router": "^20.3.2",
-    "@reown/walletkit": "^1.2.10",
-    "@walletconnect/core": "^2.21.8",
-    "@walletconnect/modal": "^2.7.0",
-    "@walletconnect/sign-client": "^2.21.8",
-    "@walletconnect/utils": "^2.21.8",
     "rxjs": "^7.8.2",
     "tailwindcss": "latest"
   },

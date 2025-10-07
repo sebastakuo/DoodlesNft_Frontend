@@ -22,9 +22,7 @@
             "styles": [],
             "scripts": [],
             "allowedCommonJsDependencies": [
-              "@walletconnect/environment",
-              "qrcode",
-              "@walletconnect/time"
+              "qrcode"
             ]
           },
           "configurations": {

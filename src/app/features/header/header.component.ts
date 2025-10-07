@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { WalletComponent } from '../../billetera/wallet.component';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -7,6 +6,6 @@ import { RouterLink } from '@angular/router';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
   standalone: true,
-  imports: [WalletComponent, RouterLink],
+    imports: [RouterLink],
 })
 export class HeaderComponent {}
