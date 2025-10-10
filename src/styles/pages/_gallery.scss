@@ -1,0 +1,225 @@
+// ============================================
+// GALLERY PAGE - GALERÍA DE NFTs
+// ============================================
+
+// 🖼️ LAYOUT PRINCIPAL GALERÍA
+// ============================
+
+.gallery-container {
+  padding: $spacing-lg;
+  max-width: $container-xl;
+  margin: 0 auto;
+  
+  @include mobile {
+    padding: $spacing-sm;
+  }
+}
+
+.gallery-header {
+  @include flex-between;
+  align-items: center;
+  margin-bottom: $spacing-xl;
+  
+  .gallery-title {
+    font-size: $font-3xl;
+    font-weight: $font-bold;
+    color: $text-primary;
+    margin: 0;
+    
+    @include mobile {
+      font-size: $font-2xl;
+    }
+  }
+  
+  .gallery-stats {
+    @include flex-center;
+    gap: $spacing-lg;
+    
+    .stat-item {
+      text-align: center;
+      
+      .stat-number {
+        font-size: $font-xl;
+        font-weight: $font-bold;
+        color: $primary-pink;
+        display: block;
+      }
+      
+      .stat-label {
+        font-size: $font-sm;
+        color: $text-muted;
+        text-transform: uppercase;
+      }
+    }
+    
+    @include mobile {
+      flex-direction: column;
+      gap: $spacing-sm;
+    }
+  }
+}
+
+// 🔍 FILTROS Y BÚSQUEDA
+// =====================
+
+.gallery-filters {
+  @include glass-effect;
+  padding: $spacing-lg;
+  border-radius: $border-radius-lg;
+  margin-bottom: $spacing-xl;
+  
+  .filters-row {
+    @include flex-between;
+    gap: $spacing-md;
+    
+    @include mobile {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+  
+  .search-box {
+    flex: 1;
+    max-width: 400px;
+    
+    .search-input {
+      @include input-base;
+      padding-left: $spacing-xl;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'%3E%3C/path%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: $spacing-sm center;
+      background-size: 16px;
+    }
+  }
+  
+  .filter-controls {
+    @include flex-center;
+    gap: $spacing-md;
+    
+    .filter-select {
+      min-width: 120px;
+    }
+  }
+}
+
+// 🎴 GRID DE GALERÍA
+// ==================
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: $spacing-lg;
+  
+  @include mobile {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: $spacing-md;
+  }
+}
+
+.gallery-item {
+  @include card-base;
+  @include card-hover;
+  overflow: hidden;
+  cursor: pointer;
+  
+  .item-image {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    transition: transform $transition-normal ease-out;
+  }
+  
+  .item-content {
+    padding: $spacing-lg;
+    
+    .item-title {
+      font-size: $font-lg;
+      font-weight: $font-semibold;
+      color: $text-primary;
+      margin-bottom: $spacing-sm;
+    }
+    
+    .item-description {
+      font-size: $font-sm;
+      color: $text-muted;
+      margin-bottom: $spacing-md;
+      line-height: 1.5;
+    }
+    
+    .item-meta {
+      @include flex-between;
+      align-items: center;
+      
+      .item-rarity {
+        @include badge($primary-purple, $text-primary);
+      }
+      
+      .item-id {
+        font-size: $font-xs;
+        color: $text-muted;
+        font-family: monospace;
+      }
+    }
+  }
+  
+  &:hover .item-image {
+    transform: scale(1.05);
+  }
+}
+
+// 🔄 ESTADOS DE GALERÍA
+// =====================
+
+.gallery-loading {
+  @include flex-center;
+  padding: $spacing-3xl;
+  
+  .loading-spinner {
+    @include spinner($size-xl, $primary-pink);
+    margin-bottom: $spacing-lg;
+  }
+  
+  .loading-text {
+    color: $text-secondary;
+    font-size: $font-base;
+  }
+}
+
+.gallery-empty {
+  @include flex-center;
+  flex-direction: column;
+  padding: $spacing-3xl;
+  text-align: center;
+  
+  .empty-icon {
+    font-size: 4rem;
+    color: $text-muted;
+    margin-bottom: $spacing-lg;
+  }
+  
+  .empty-title {
+    font-size: $font-xl;
+    color: $text-primary;
+    margin-bottom: $spacing-sm;
+  }
+  
+  .empty-description {
+    color: $text-muted;
+    font-size: $font-base;
+    max-width: 400px;
+  }
+}
+
+// 📱 RESPONSIVE GALLERY
+// =====================
+
+@include tablet {
+  .gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+  
+  .gallery-filters .filters-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

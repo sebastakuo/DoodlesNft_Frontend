@@ -1,0 +1,480 @@
+// ============================================
+// MIXINS SCSS - PATRONES REUTILIZABLES
+// ============================================
+
+@use 'sass:math';
+
+// ✨ MIXIN GLASSMORPHISM
+// Efecto de cristal translúcido
+// ============================================
+// MIXINS AVANZADOS PARA OPTIMIZACIÓN
+// ============================================
+
+// Mixin para contenedores con scroll vertical
+@mixin scroll-container($max-height: 500px) {
+  max-height: $max-height;
+  overflow-y: auto;
+}
+
+// Mixin para espaciado entre elementos flex
+@mixin flex-gap($gap: $spacing-sm) {
+  gap: $gap;
+}
+
+// Mixin para elementos centrados absolutos
+@mixin center-absolute {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// Mixin para overlay completo
+@mixin full-overlay($bg-color: rgba(0, 0, 0, 0.8)) {
+  position: absolute;
+  inset: 0;
+  background-color: $bg-color;
+}
+
+// Mixin para contenedor de modal
+@mixin modal-container {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  @include flex-center;
+  padding: $spacing-md;
+}
+
+// Mixin para elementos con aspecto cuadrado
+@mixin aspect-square {
+  aspect-ratio: 1;
+  width: 100%;
+}
+
+// Mixin para botones circulares
+@mixin circular-button($size: $spacing-xl) {
+  width: $size;
+  height: $size;
+  border-radius: $rounded-full;
+  @include flex-center;
+  border: none;
+  cursor: pointer;
+}
+
+// Mixin para texto truncado
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Mixin para grids responsivos
+@mixin responsive-grid($mobile: 1, $tablet: 2, $desktop: 3) {
+  display: grid;
+  gap: $spacing-md;
+  grid-template-columns: repeat($mobile, 1fr);
+  
+  @media (min-width: $breakpoint-md) {
+    grid-template-columns: repeat($tablet, 1fr);
+  }
+  
+  @media (min-width: $breakpoint-lg) {
+    grid-template-columns: repeat($desktop, 1fr);
+  }
+}
+
+// Mixin para tips y descripciones pequeñas
+@mixin tip-text($color: $text-secondary) {
+  font-size: $font-sm;
+  font-style: italic;
+  color: $color;
+}
+
+// Mixin para contenedores con información secundaria
+@mixin info-container {
+  margin-bottom: $spacing-md;
+  font-size: $font-sm;
+  color: $text-disabled;
+}
+
+@mixin glass-effect($background: $glass-primary, $backdrop-blur: $blur-md, $border-color: $border-secondary) {
+  background: $background;
+  backdrop-filter: blur($backdrop-blur);
+  border: 1px solid $border-color;
+  box-shadow: $shadow-glass;
+}
+
+// 📦 MIXINS PARA LAYOUT FLEX
+// Flex centrado vertical y horizontal
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Flex columna con gap
+@mixin flex-column($gap: $spacing-md) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+// Flex fila con alineación y gap
+@mixin flex-row($align: center, $justify: flex-start, $gap: $spacing-sm) {
+  display: flex;
+  align-items: $align;
+  justify-content: $justify;
+  gap: $gap;
+}
+
+// 🎯 MIXINS PARA INTERACCIONES
+// Hover con elevación
+@mixin hover-elevate($scale: 1.05, $shadow: $shadow-lg) {
+  transition: all $transition-base ease;
+  
+  &:hover {
+    transform: scale($scale);
+    box-shadow: $shadow;
+  }
+}
+
+// 🎨 MIXINS PARA INPUTS
+// Input base con focus
+@mixin input-base {
+  width: 100%;
+  padding: $spacing-sm;
+  background-color: $input-bg;
+  border: $border-thin solid $border-secondary;
+  border-radius: $rounded-lg;
+  transition: all $transition-base ease;
+  color: $color-white;
+  
+  &:focus {
+    outline: none;
+    border-color: $accent-purple;
+    box-shadow: 0 0 0 2px rgba($accent-purple, 0.3);
+  }
+}
+
+// 📍 MIXINS PARA POSICIONAMIENTO
+// Posicionamiento absoluto
+@mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin absolute-position($top: null, $right: null, $bottom: null, $left: null) {
+  position: absolute;
+  @if $top { top: $top; }
+  @if $right { right: $right; }
+  @if $bottom { bottom: $bottom; }
+  @if $left { left: $left; }
+}
+
+// 🏷️ MIXINS PARA BADGES
+// Badge base
+@mixin badge-base($bg-color, $text-color, $border-color: transparent) {
+  font-size: $font-sm;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $rounded-full;
+  border: $border-thin solid $border-color;
+  background-color: $bg-color;
+  color: $text-color;
+}
+
+// 🔘 MIXIN SISTEMA DE BOTONES
+// Botón base reutilizable
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-sm $spacing-md;
+  border: none;
+  border-radius: $rounded-md;
+  font-weight: $font-medium;
+  font-size: $font-sm;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all $transition-normal ease-out;
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// 🎨 VARIANTES DE BOTONES
+@mixin button-variant($bg-color, $text-color: $text-primary, $hover-bg: darken($bg-color, 10%)) {
+  @include button-base;
+  background-color: $bg-color;
+  color: $text-color;
+  
+  &:hover:not(:disabled) {
+    background-color: $hover-bg;
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// 📱 MIXIN RESPONSIVE
+// Media queries simplificadas
+@mixin mobile {
+  @media (max-width: $mobile) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$mobile + 1px}) and (max-width: $tablet) {
+    @content;
+  }
+}
+
+@mixin laptop {
+  @media (min-width: #{$tablet + 1px}) and (max-width: $laptop) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$laptop + 1px}) {
+    @content;
+  }
+}
+
+// 📐 MIXIN GRID SISTEMA
+// Grid flexible y responsive
+@mixin grid($columns: $grid-columns, $gap: $grid-gap) {
+  display: grid;
+  grid-template-columns: repeat($columns, 1fr);
+  gap: $gap;
+}
+
+// 🔄 MIXIN FLEXBOX
+// Utilidades de flexbox
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// 🎬 MIXIN ANIMACIONES
+// Animaciones predefinidas
+@mixin fade-in($duration: $transition-normal) {
+  animation: fadeIn $duration $ease-in-out;
+}
+
+@mixin slide-up($duration: $transition-normal) {
+  animation: slideUp $duration $ease-out;
+}
+
+@mixin scale-in($duration: $transition-normal) {
+  animation: scaleIn $duration $ease-out;
+}
+
+// 🃏 MIXIN CARDS
+// Tarjetas base
+@mixin card-base {
+  @include glass-effect;
+  border-radius: $rounded-lg;
+  padding: $spacing-lg;
+  transition: all $transition-normal $ease-out;
+}
+
+@mixin card-hover {
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-lg;
+  }
+}
+
+// 🎯 MIXIN CARDS DE CARACTERÍSTICAS
+// ==================================
+@mixin card-feature {
+  @include card-base;
+  text-align: center;
+  
+  .feature-icon {
+    width: $size-xl;
+    height: $size-xl;
+    margin: 0 auto $spacing-md;
+    border-radius: 50%;
+    @include flex-center;
+    background-color: $primary-purple;
+    color: $text-primary;
+    font-size: $font-xl;
+  }
+  
+  .feature-title {
+    font-size: $font-lg;
+    font-weight: $font-semibold;
+    margin-bottom: $spacing-sm;
+  }
+  
+  .feature-description {
+    color: $text-muted;
+    font-size: $font-sm;
+    line-height: 1.6;
+  }
+}
+
+// 📊 MIXIN CARDS DE ESTADÍSTICAS
+// ===============================
+@mixin card-stat {
+  @include card-base;
+  text-align: center;
+  
+  .stat-value {
+    font-size: $font-2xl;
+    font-weight: $font-bold;
+    color: $primary-pink;
+    margin-bottom: $spacing-xs;
+  }
+  
+  .stat-label {
+    font-size: $font-sm;
+    color: $text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}
+
+// 📝 MIXIN INPUTS
+// Campos de formulario
+@mixin input-base {
+  width: 100%;
+  padding: $spacing-sm $spacing-md;
+  background-color: $surface-medium;
+  border: 1px solid $border-secondary;
+  border-radius: $rounded-md;
+  color: $text-primary;
+  font-size: $font-sm;
+  transition: all $transition-normal ease-out;
+  
+  &:focus {
+    outline: none;
+    border-color: $primary-blue;
+    box-shadow: 0 0 0 3px rgba($primary-blue, 0.1);
+  }
+  
+  &::placeholder {
+    color: $text-muted;
+  }
+}
+
+// 🌟 MIXIN BADGES
+// Etiquetas y badges
+@mixin badge($bg-color: $surface-light, $text-color: $text-primary) {
+  display: inline-flex;
+  align-items: center;
+  padding: $spacing-xs $spacing-sm;
+  background-color: $bg-color;
+  color: $text-color;
+  font-size: $font-xs;
+  font-weight: $font-medium;
+  border-radius: $rounded-full;
+  white-space: nowrap;
+}
+
+// 🪟 MIXIN MODALES
+// Modales y overlays
+@mixin modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $glass-overlay;
+  backdrop-filter: blur($blur-sm);
+  z-index: $z-modal;
+  @include flex-center;
+}
+
+@mixin modal-content {
+  @include glass-effect;
+  border-radius: $rounded-xl;
+  padding: $spacing-xl;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+// 📏 MIXIN ASPECT RATIO
+// Mantener proporciones
+@mixin aspect-ratio($width: 1, $height: 1) {
+  aspect-ratio: math.div($width, $height);
+  
+  // Fallback para navegadores antiguos
+  @supports not (aspect-ratio: 1 / 1) {
+    &::before {
+      content: '';
+      display: block;
+      padding-bottom: math.percentage(math.div($height, $width));
+    }
+  }
+}
+
+// 🎯 MIXIN LOADER/SPINNER
+// Indicadores de carga
+@mixin spinner($size: $size-lg, $color: $accent-orange, $thickness: 4px) {
+  width: $size;
+  height: $size;
+  border: $thickness solid rgba(255, 255, 255, 0.2);
+  border-top: $thickness solid $color;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+// 🖱️ MIXIN SCROLLBAR
+// Barras de desplazamiento personalizadas
+@mixin custom-scrollbar($thumb-color: $accent-orange, $track-color: $bg-primary) {
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: $track-color;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: $thumb-color;
+    border-radius: 10px;
+    border: 2px solid $track-color;
+  }
+}
+
+// 🎪 MIXIN TRES COLUMNAS
+// Layout específico para Creator
+@mixin three-column-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: $spacing-lg;
+  height: 100vh;
+  
+  @include tablet {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    height: auto;
+    gap: $spacing-md;
+  }
+  
+  @include mobile {
+    gap: $spacing-sm;
+  }
+}

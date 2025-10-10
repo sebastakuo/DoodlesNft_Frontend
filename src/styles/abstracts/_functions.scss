@@ -1,0 +1,54 @@
+// ============================================
+// FUNCIONES SCSS - UTILIDADES DE CÁLCULO
+// ============================================
+
+// 📏 FUNCIÓN DE ESPACIADO
+// Convierte valores de espaciado a rem
+@function spacing($value) {
+  @return $value * 0.25rem; // Múltiplos de 4px
+}
+
+// 🎨 FUNCIÓN DE OPACIDAD DE COLOR
+// Agrega transparencia a cualquier color
+@function rgba-color($color, $opacity) {
+  @return rgba($color, $opacity);
+}
+
+// 📐 FUNCIÓN DE CONVERSIÓN PX A REM
+// Convierte píxeles a rem (base 16px)
+@function px-to-rem($px, $base: 16) {
+  @return calc($px / $base) * 1rem;
+}
+
+// 🔍 FUNCIÓN DE ESCALADO
+// Escala valores proporcionalmente
+@function scale($value, $ratio: 1.25) {
+  @return $value * $ratio;
+}
+
+// 🌊 FUNCIÓN DE FLUIDEZ TIPOGRÁFICA
+// Crea tamaños de fuente fluidos entre breakpoints
+@function fluid-size($min-size, $max-size, $min-width: 320px, $max-width: 1200px) {
+  @return clamp(#{$min-size}, #{$min-size} + (#{$max-size} - #{$min-size}) * ((100vw - #{$min-width}) / (#{$max-width} - #{$min-width})), #{$max-size});
+}
+
+// 🎛️ FUNCIÓN DE CONTRASTE
+// Retorna color claro u oscuro basado en el fondo
+@function contrast-color($background-color, $light-color: #ffffff, $dark-color: #000000) {
+  $luminance: luminance($background-color);
+  @if $luminance > 0.5 {
+    @return $dark-color;
+  } @else {
+    @return $light-color;
+  }
+}
+
+// ⚡ FUNCIÓN DE LUMINANCIA
+// Calcula la luminancia de un color
+@function luminance($color) {
+  $red: red($color) / 255;
+  $green: green($color) / 255;
+  $blue: blue($color) / 255;
+  
+  @return 0.299 * $red + 0.587 * $green + 0.114 * $blue;
+}

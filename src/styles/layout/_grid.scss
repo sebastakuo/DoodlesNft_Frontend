@@ -1,0 +1,127 @@
+// ============================================
+// SISTEMA DE GRID - LAYOUT FLEXIBLE
+// ============================================
+
+// Contenedor principal
+.container {
+  width: 100%;
+  max-width: $container-xl;
+  margin: 0 auto;
+  padding: 0 $spacing-md;
+  
+  @include mobile {
+    padding: 0 $spacing-sm;
+  }
+}
+
+// Variantes de contenedor
+.container-sm {
+  max-width: $container-sm;
+}
+
+.container-md {
+  max-width: $container-md;
+}
+
+.container-lg {
+  max-width: $container-lg;
+}
+
+// Grid sistema base
+.grid {
+  @include grid;
+}
+
+// Variantes de grid
+.grid-1 { @include grid(1); }
+.grid-2 { @include grid(2); }
+.grid-3 { @include grid(3); }
+.grid-4 { @include grid(4); }
+.grid-6 { @include grid(6); }
+.grid-12 { @include grid(12); }
+
+// Grid responsive
+.grid-responsive {
+  @include grid(1);
+  
+  @include tablet {
+    @include grid(2);
+  }
+  
+  @include laptop {
+    @include grid(3);
+  }
+  
+  @include desktop {
+    @include grid(4);
+  }
+}
+
+// Flexbox utilities
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  @include flex-column;
+}
+
+.flex-center {
+  @include flex-center;
+}
+
+.flex-between {
+  @include flex-between;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+// Justify content
+.justify-start { justify-content: flex-start; }
+.justify-center { justify-content: center; }
+.justify-end { justify-content: flex-end; }
+.justify-between { justify-content: space-between; }
+.justify-around { justify-content: space-around; }
+
+// Align items
+.items-start { align-items: flex-start; }
+.items-center { align-items: center; }
+.items-end { align-items: flex-end; }
+.items-stretch { align-items: stretch; }
+
+// Flex grow y shrink
+.flex-1 { flex: 1; }
+.flex-auto { flex: auto; }
+.flex-none { flex: none; }
+
+// Grid areas para layouts específicos
+.grid-area-header { grid-area: header; }
+.grid-area-sidebar { grid-area: sidebar; }
+.grid-area-main { grid-area: main; }
+.grid-area-footer { grid-area: footer; }
+
+// Layout de página completa
+.page-layout {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas: 
+    "header"
+    "main" 
+    "footer";
+}
+
+// Gaps de grid
+.gap-0 { gap: 0; }
+.gap-1 { gap: $spacing-xs; }
+.gap-2 { gap: $spacing-sm; }
+.gap-3 { gap: $spacing-md; }
+.gap-4 { gap: $spacing-lg; }
+.gap-5 { gap: $spacing-xl; }
+.gap-6 { gap: $spacing-2xl; }

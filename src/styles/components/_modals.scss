@@ -1,0 +1,103 @@
+// ============================================
+// MODALES - VENTANAS EMERGENTES
+// ============================================
+
+// Overlay del modal
+.modal-overlay {
+  @include modal-overlay;
+  animation: fadeIn $transition-normal ease-out;
+}
+
+// Contenido del modal
+.modal-content {
+  @include modal-content;
+  animation: slideUp $transition-normal ease-out;
+}
+
+// 📐 TAMAÑOS DE MODALES
+// =====================
+
+.modal-sm {
+  .modal-content {
+    max-width: 400px;
+  }
+}
+
+.modal-md {
+  .modal-content {
+    max-width: 600px;
+  }
+}
+
+.modal-lg {
+  .modal-content {
+    max-width: 800px;
+  }
+}
+
+.modal-xl {
+  .modal-content {
+    max-width: 1200px;
+  }
+}
+
+// 🎪 PARTES DEL MODAL
+// ===================
+
+.modal-header {
+  @include flex-between;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid $border-secondary;
+  margin-bottom: $spacing-lg;
+  
+  .modal-title {
+    font-size: $font-xl;
+    font-weight: $font-semibold;
+    margin: 0;
+  }
+  
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: $font-xl;
+    color: $text-muted;
+    cursor: pointer;
+    padding: $spacing-xs;
+    
+    &:hover {
+      color: $text-primary;
+    }
+  }
+}
+
+.modal-body {
+  @include flex-column;
+  gap: $spacing-md;
+}
+
+.modal-footer {
+  @include flex-between;
+  padding-top: $spacing-md;
+  border-top: 1px solid $border-secondary;
+  margin-top: $spacing-lg;
+  gap: $spacing-md;
+}
+
+// 🎬 ANIMACIONES DE MODAL
+// =======================
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

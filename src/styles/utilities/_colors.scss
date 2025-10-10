@@ -1,0 +1,158 @@
+// ============================================
+// UTILIDADES DE COLORES - CLASES DE COLOR
+// ============================================
+
+// 🎨 COLORES DE TEXTO
+// ===================
+
+.text-primary { color: $text-primary; }
+.text-secondary { color: $text-secondary; }
+.text-muted { color: $text-muted; }
+.text-disabled { color: $text-disabled; }
+
+// Colores de marca
+.text-pink { color: $primary-pink; }
+.text-pink-dark { color: $primary-pink-dark; }
+.text-blue { color: $primary-blue; }
+.text-blue-light { color: $primary-blue-light; }
+.text-purple { color: $primary-purple; }
+.text-purple-light { color: $primary-purple-light; }
+.text-green { color: $primary-green; }
+.text-green-light { color: $primary-green-light; }
+.text-orange { color: $accent-orange; }
+
+// Estados de texto
+.text-success { color: $primary-green; }
+.text-warning { color: #F59E0B; }
+.text-error { color: #EF4444; }
+.text-info { color: $primary-blue; }
+
+// 🎯 COLORES DE FONDO
+// ===================
+
+.bg-primary { background-color: $bg-primary; }
+.bg-secondary { background-color: $bg-secondary; }
+.bg-surface { background-color: $surface-medium; }
+.bg-surface-light { background-color: $surface-light; }
+.bg-transparent { background-color: transparent; }
+
+// Fondos de marca
+.bg-pink { background-color: $primary-pink; }
+.bg-pink-dark { background-color: $primary-pink-dark; }
+.bg-blue { background-color: $primary-blue; }
+.bg-blue-light { background-color: $primary-blue-light; }
+.bg-purple { background-color: $primary-purple; }
+.bg-purple-light { background-color: $primary-purple-light; }
+.bg-green { background-color: $primary-green; }
+.bg-green-light { background-color: $primary-green-light; }
+
+// Fondos con opacidad
+.bg-glass { background-color: $glass-primary; }
+.bg-glass-surface { background-color: $glass-surface; }
+.bg-overlay { background-color: $glass-overlay; }
+
+// Fondos de estado
+.bg-success { background-color: $primary-green; }
+.bg-warning { background-color: #F59E0B; }
+.bg-error { background-color: #EF4444; }
+.bg-info { background-color: $primary-blue; }
+
+// 🖼️ GRADIENTES
+// =============
+
+.bg-gradient-pink-purple {
+  background: linear-gradient(135deg, $primary-pink 0%, $primary-purple 100%);
+}
+
+.bg-gradient-blue-purple {
+  background: linear-gradient(135deg, $primary-blue 0%, $primary-purple 100%);
+}
+
+.bg-gradient-green-blue {
+  background: linear-gradient(135deg, $primary-green 0%, $primary-blue 100%);
+}
+
+.bg-gradient-dark {
+  background: linear-gradient(135deg, $bg-secondary 0%, $bg-primary 100%);
+}
+
+.bg-gradient-surface {
+  background: linear-gradient(135deg, $surface-dark 0%, $surface-medium 100%);
+}
+
+// 🌈 BORDES DE COLOR
+// ==================
+
+.border-transparent { border-color: transparent; }
+.border-primary { border-color: $border-primary; }
+.border-secondary { border-color: $border-secondary; }
+.border-light { border-color: $border-light; }
+
+// Bordes de marca
+.border-pink { border-color: $primary-pink; }
+.border-blue { border-color: $primary-blue; }
+.border-purple { border-color: $primary-purple; }
+.border-green { border-color: $primary-green; }
+
+// Bordes de estado
+.border-success { border-color: $primary-green; }
+.border-warning { border-color: #F59E0B; }
+.border-error { border-color: #EF4444; }
+.border-info { border-color: $primary-blue; }
+
+// ✨ EFECTOS DE COLOR
+// ==================
+
+// Hover states
+.hover-text-pink:hover { color: $primary-pink; }
+.hover-text-blue:hover { color: $primary-blue; }
+.hover-text-purple:hover { color: $primary-purple; }
+
+.hover-bg-pink:hover { background-color: $primary-pink; }
+.hover-bg-blue:hover { background-color: $primary-blue; }
+.hover-bg-purple:hover { background-color: $primary-purple; }
+
+// Focus states
+.focus-border-pink:focus { border-color: $primary-pink; }
+.focus-border-blue:focus { border-color: $primary-blue; }
+.focus-border-purple:focus { border-color: $primary-purple; }
+
+// Active states
+.active-bg-pink { background-color: $primary-pink; }
+.active-bg-blue { background-color: $primary-blue; }
+.active-bg-purple { background-color: $primary-purple; }
+
+// 🎨 UTILIDADES DE OPACIDAD
+// =========================
+
+.opacity-0 { opacity: 0; }
+.opacity-25 { opacity: 0.25; }
+.opacity-50 { opacity: 0.5; }
+.opacity-75 { opacity: 0.75; }
+.opacity-100 { opacity: 1; }
+
+// 🌟 COMBINACIONES ESPECIALES
+// ===========================
+
+// Text on colored backgrounds
+.text-on-pink { color: $text-primary; }
+.text-on-blue { color: $text-primary; }
+.text-on-purple { color: $text-primary; }
+.text-on-dark { color: $text-primary; }
+.text-on-light { color: $bg-primary; }
+
+// Accent combinations
+.accent-pink {
+  color: $primary-pink;
+  border-color: $primary-pink;
+}
+
+.accent-blue {
+  color: $primary-blue;
+  border-color: $primary-blue;
+}
+
+.accent-purple {
+  color: $primary-purple;
+  border-color: $primary-purple;
+}

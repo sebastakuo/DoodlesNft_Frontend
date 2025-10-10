@@ -1,0 +1,246 @@
+// ============================================
+// SISTEMA DE CARDS - TARJETAS REUTILIZABLES
+// ============================================
+
+// Card base
+.card {
+  @include card-base;
+  @include card-hover;
+}
+
+// 🎨 VARIANTES DE CARDS
+// =====================
+
+// Card simple sin efectos
+.card-simple {
+  background-color: $surface-medium;
+  border: 1px solid $border-secondary;
+  border-radius: $border-radius-lg;
+  padding: $spacing-lg;
+}
+
+// Card con glass effect
+.card-glass {
+  @include glass-effect;
+  border-radius: $border-radius-lg;
+  padding: $spacing-lg;
+}
+
+// Card elevada (con más sombra)
+.card-elevated {
+  @include card-base;
+  box-shadow: $shadow-xl;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 48px $shadow-heavy;
+  }
+}
+
+// 📐 TAMAÑOS DE CARDS
+// ===================
+
+.card-sm {
+  padding: $spacing-md;
+  border-radius: $border-radius-md;
+}
+
+.card-lg {
+  padding: $spacing-xl;
+  border-radius: $border-radius-xl;
+}
+
+// 🖼️ CARDS CON IMAGEN
+// ===================
+
+.card-image {
+  padding: 0;
+  overflow: hidden;
+  
+  .card-image-top {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: $border-radius-lg $border-radius-lg 0 0;
+  }
+  
+  .card-body {
+    padding: $spacing-lg;
+  }
+}
+
+// 🎴 CARDS DE GALERÍA
+// ===================
+
+.card-gallery {
+  @include card-base;
+  @include aspect-ratio(1, 1);
+  // Mover estas declaraciones ANTES de las reglas anidadas
+  overflow: hidden;
+  position: relative;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform $transition-normal ease-out;
+  }
+  
+  &:hover img {
+    transform: scale(1.05);
+  }
+  
+  .card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(0, 0, 0, 0.1) 50%,
+      rgba(0, 0, 0, 0.8) 100%
+    );
+    opacity: 0;
+    transition: opacity $transition-normal ease-out;
+    @include flex-center;
+    flex-direction: column;
+    color: $text-primary;
+  }
+  
+  &:hover .card-overlay {
+    opacity: 1;
+  }
+}
+
+// 📊 CARDS DE ESTADÍSTICAS
+// ========================
+
+.card-stat {
+  @include card-base;
+  text-align: center;
+  
+  .stat-value {
+    font-size: $font-2xl;
+    font-weight: $font-bold;
+    color: $primary-pink;
+    margin-bottom: $spacing-xs;
+  }
+  
+  .stat-label {
+    font-size: $font-sm;
+    color: $text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}
+
+// 🎯 CARDS DE CARACTERÍSTICAS
+// ===========================
+
+.card-feature {
+  @include card-base;
+  text-align: center;
+  
+  .feature-icon {
+    width: $size-xl;
+    height: $size-xl;
+    margin: 0 auto $spacing-md;
+    border-radius: 50%;
+    @include flex-center;
+    background-color: $primary-purple;
+    color: $text-primary;
+    font-size: $font-xl;
+  }
+  
+  .feature-title {
+    font-size: $font-lg;
+    font-weight: $font-semibold;
+    margin-bottom: $spacing-sm;
+  }
+  
+  .feature-description {
+    color: $text-muted;
+    font-size: $font-sm;
+    line-height: 1.6;
+  }
+}
+
+// 🎪 HEADERS Y FOOTERS DE CARDS
+// ==============================
+
+.card-header {
+  @include flex-between;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid $border-secondary;
+  margin-bottom: $spacing-md;
+  
+  .card-title {
+    font-size: $font-lg;
+    font-weight: $font-semibold;
+    margin: 0;
+  }
+  
+  .card-subtitle {
+    font-size: $font-sm;
+    color: $text-muted;
+    margin: 0;
+  }
+}
+
+.card-footer {
+  border-top: 1px solid $border-secondary;
+  padding-top: $spacing-md;
+  margin-top: $spacing-md;
+  @include flex-between;
+  align-items: center;
+}
+
+.card-body {
+  @include flex-column;
+  gap: $spacing-md;
+}
+
+// 🔄 ESTADOS DE CARDS
+// ===================
+
+.card-loading {
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    @include spinner;
+  }
+}
+
+.card-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.card-selected {
+  border-color: $primary-blue;
+  box-shadow: 0 0 0 3px rgba($primary-blue, 0.1);
+}
+
+// 📱 RESPONSIVE CARDS
+// ===================
+
+@include mobile {
+  .card {
+    padding: $spacing-md;
+  }
+  
+  .card-lg {
+    padding: $spacing-lg;
+  }
+  
+  .card-image .card-image-top {
+    height: 150px;
+  }
+}

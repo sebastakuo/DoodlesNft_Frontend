@@ -19,7 +19,9 @@
             "assets": [
               "src/assets"
             ],
-            "styles": [],
+            "styles": [
+              "src/styles/main.scss"
+            ],
             "scripts": [],
             "allowedCommonJsDependencies": [
               "qrcode"

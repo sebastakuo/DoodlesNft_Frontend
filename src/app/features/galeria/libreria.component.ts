@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 @Component({
 	selector: 'app-libreria',
 	templateUrl: './libreria.component.html',
-	styleUrls: ['./libreria.component.css'],
+	styleUrls: ['./libreria.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 		standalone: true,
 		imports: [CommonModule],

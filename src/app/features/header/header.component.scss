@@ -1,0 +1,45 @@
+// ============================================
+// HEADER COMPONENT - REFACTORIZADO CON SCSS
+// ============================================
+
+// Importar variables y mixins
+@import '../../../styles/abstracts/variables';
+@import '../../../styles/abstracts/mixins';
+
+/* ========================================
+   ESTILOS PARA EL HEADER DE NAVEGACIÓN
+   ======================================== */
+
+/* Enlaces de navegación con efectos de transición suave */
+nav a {
+  font-size: $font-sm;
+  text-decoration: none;
+  border-radius: $rounded-md;
+  font-weight: $font-medium;
+  transition: all $transition-fast $ease-in-out;
+  @include hover-elevate(1, 0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+/* ========================================
+   RESPONSIVE DESIGN PARA MÓVILES
+   ======================================== */
+
+/* Ajustes para pantallas pequeñas - layout vertical */
+@media (max-width: $breakpoint-md) {
+  /* Contenedor principal cambia a layout vertical */
+  .container {
+    @include flex-column;
+    gap: $spacing-md;
+  }
+  
+  /* Navegación con espaciado reducido */
+  nav {
+    gap: $spacing-sm;
+  }
+  
+  /* Enlaces más compactos en móviles */
+  nav a {
+    padding: $spacing-sm $spacing-md;
+    font-size: $font-xs;
+  }
+}

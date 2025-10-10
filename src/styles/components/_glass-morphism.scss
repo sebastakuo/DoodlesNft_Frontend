@@ -1,0 +1,246 @@
+// ============================================
+// GLASS MORPHISM - EFECTOS DE CRISTAL
+// ============================================
+
+// Glass effect base (ya extraído de tu CSS)
+.glass-card {
+  @include glass-effect;
+}
+
+// ✨ VARIANTES DE INTENSIDAD
+// ==========================
+
+// Glass sutil
+.glass-subtle {
+  @include glass-effect(
+    rgba(26, 26, 46, 0.5),
+    $blur-sm,
+    rgba(255, 255, 255, 0.05)
+  );
+}
+
+// Glass medio (default)
+.glass-medium {
+  @include glass-effect(
+    $glass-primary,
+    $blur-md,
+    $border-light
+  );
+}
+
+// Glass intenso
+.glass-strong {
+  @include glass-effect(
+    rgba(26, 26, 46, 0.9),
+    $blur-lg,
+    rgba(255, 255, 255, 0.15)
+  );
+}
+
+// 🎨 GLASS CON COLORES
+// ====================
+
+// Glass con tinte azul
+.glass-blue {
+  @include glass-effect(
+    rgba(59, 130, 246, 0.1),
+    $blur-md,
+    rgba(59, 130, 246, 0.2)
+  );
+}
+
+// Glass con tinte rosa
+.glass-pink {
+  @include glass-effect(
+    rgba(236, 72, 153, 0.1),
+    $blur-md,
+    rgba(236, 72, 153, 0.2)
+  );
+}
+
+// Glass con tinte morado
+.glass-purple {
+  @include glass-effect(
+    rgba(139, 92, 246, 0.1),
+    $blur-md,
+    rgba(139, 92, 246, 0.2)
+  );
+}
+
+// Glass con tinte verde
+.glass-green {
+  @include glass-effect(
+    rgba(16, 185, 129, 0.1),
+    $blur-md,
+    rgba(16, 185, 129, 0.2)
+  );
+}
+
+// 🌟 GLASS ESPECIALES
+// ===================
+
+// Glass para overlays/modales
+.glass-overlay {
+  @include glass-effect(
+    $glass-overlay,
+    $blur-md,
+    rgba(255, 255, 255, 0.05)
+  );
+}
+
+// Glass para navegación
+.glass-nav {
+  @include glass-effect(
+    rgba(26, 26, 46, 0.8),
+    $blur-lg,
+    rgba(255, 255, 255, 0.1)
+  );
+  position: sticky;
+  top: 0;
+  z-index: $z-dropdown;
+}
+
+// Glass para sidebars
+.glass-sidebar {
+  @include glass-effect(
+    $glass-surface,
+    $blur-md,
+    $border-light
+  );
+  height: 100vh;
+  position: fixed;
+}
+
+// 🎪 EFECTOS COMBINADOS
+// =====================
+
+// Glass con hover effect
+.glass-hover {
+  @include glass-effect;
+  transition: all $transition-normal $ease-out;
+  
+  &:hover {
+    background: rgba(26, 26, 46, 0.8);
+    backdrop-filter: blur(16px);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+  }
+}
+
+// Glass con animación de entrada
+.glass-animate {
+  @include glass-effect;
+  animation: glassSlideIn 0.5s $ease-out;
+}
+
+// Glass con resplandor
+.glass-glow {
+  @include glass-effect;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(
+      45deg,
+      $primary-pink,
+      $primary-blue,
+      $primary-purple,
+      $primary-green
+    );
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity $transition-normal ease-out;
+  }
+  
+  &:hover::before {
+    opacity: 0.3;
+  }
+}
+
+// 📐 FORMAS ESPECIALES
+// ====================
+
+// Glass circular
+.glass-circle {
+  @include glass-effect;
+  border-radius: 50%;
+  @include flex-center;
+}
+
+// Glass con esquinas específicas
+.glass-rounded-top {
+  @include glass-effect;
+  border-radius: $border-radius-xl $border-radius-xl 0 0;
+}
+
+.glass-rounded-bottom {
+  @include glass-effect;
+  border-radius: 0 0 $border-radius-xl $border-radius-xl;
+}
+
+// 🎬 ANIMACIONES GLASS
+// ====================
+
+@keyframes glassSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+    backdrop-filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    backdrop-filter: blur(12px);
+  }
+}
+
+@keyframes glassPulse {
+  0%, 100% {
+    background: rgba(26, 26, 46, 0.7);
+  }
+  50% {
+    background: rgba(26, 26, 46, 0.9);
+  }
+}
+
+// Glass con animación pulsante
+.glass-pulse {
+  @include glass-effect;
+  animation: glassPulse 2s infinite;
+}
+
+// 🔧 UTILIDADES GLASS
+// ===================
+
+// Solo el backdrop filter
+.backdrop-blur-sm { backdrop-filter: blur($blur-sm); }
+.backdrop-blur-md { backdrop-filter: blur($blur-md); }
+.backdrop-blur-lg { backdrop-filter: blur($blur-lg); }
+
+// Solo el border glass
+.border-glass { border: 1px solid $border-light; }
+.border-glass-strong { border: 1px solid rgba(255, 255, 255, 0.15); }
+
+// 📱 RESPONSIVE GLASS
+// ===================
+
+@include mobile {
+  .glass-card,
+  .glass-medium,
+  .glass-hover {
+    // Reduce blur en móviles para mejor performance
+    backdrop-filter: blur($blur-sm);
+  }
+  
+  .glass-sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+}

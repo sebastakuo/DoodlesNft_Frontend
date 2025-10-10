@@ -1,0 +1,44 @@
+// ============================================
+// LIBRERÍA/GALERÍA COMPONENT - REFACTORIZADO CON SCSS
+// ============================================
+
+// Importar variables y mixins
+@import '../../../styles/abstracts/variables';
+@import '../../../styles/abstracts/mixins';
+
+/* ========================================
+   ESTILOS PARA LA GALERÍA/LIBRERÍA NFT
+   ======================================== */
+
+/* Tarjeta principal de la librería con gradiente oscuro y bordes redondeados */
+.libreria-card {
+	@include glass-effect(
+		linear-gradient(135deg, $surface-dark 0%, $bg-primary 100%),
+		$blur-lg,
+		$border-secondary
+	);
+	border-radius: $rounded-xl;
+	padding: $spacing-xl;
+}
+
+/* Botones circulares para acciones de la librería con efecto hover */
+.libreria-btn {
+	@include circular-button($spacing-2xl);
+	background: $surface-medium;
+	color: $color-white;
+	@include hover-elevate(1, $shadow-md);
+	transition: background $transition-fast;
+	
+	&:hover {
+		background: $surface-dark;
+	}
+}
+
+/* ========================================
+   CLASES UTILITARIAS ESPECÍFICAS DE GALERÍA
+   ======================================== */
+
+/* Cursor de zoom para elementos interactivos de galería */
+.cursor-zoom-in {
+	cursor: zoom-in;
+}

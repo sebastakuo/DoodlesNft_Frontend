@@ -1,0 +1,359 @@
+// ============================================
+// CREATOR PAGE - ESTILOS ESPECÍFICOS NFT CREATOR
+// ============================================
+
+// 🎨 LAYOUT PRINCIPAL CREATOR
+// ===========================
+
+.creator-container {
+  @include three-column-layout;
+  padding: $spacing-lg;
+  min-height: 100vh;
+  
+  @include mobile {
+    padding: $spacing-sm;
+  }
+}
+
+// 📤 COLUMNA DE SUBIDA DE ARCHIVOS
+// ================================
+
+.upload-section {
+  .upload-area {
+    @include card-base;
+    border: 2px dashed $border-secondary;
+    text-align: center;
+    padding: $spacing-2xl;
+    cursor: pointer;
+    transition: all $transition-normal ease-out;
+    position: relative;
+    min-height: 200px;
+    @include flex-center;
+    flex-direction: column;
+    
+    &:hover {
+      border-color: $primary-pink;
+      background-color: $glass-surface;
+    }
+    
+    &.dragover {
+      border-color: $primary-pink;
+      background-color: $glass-surface;
+      transform: scale(1.02);
+    }
+    
+    .upload-icon {
+      font-size: $font-3xl;
+      color: $text-muted;
+      margin-bottom: $spacing-md;
+    }
+    
+    .upload-text {
+      color: $text-secondary;
+      font-size: $font-base;
+      margin-bottom: $spacing-sm;
+    }
+    
+    .upload-hint {
+      color: $text-muted;
+      font-size: $font-sm;
+    }
+  }
+  
+  .file-preview {
+    @include card-base;
+    margin-top: $spacing-lg;
+    
+    .preview-image {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: $border-radius-md;
+      margin-bottom: $spacing-md;
+    }
+    
+    .file-info {
+      @include flex-between;
+      font-size: $font-sm;
+      color: $text-muted;
+    }
+  }
+}
+
+// 🏷️ COLUMNA DE ATRIBUTOS
+// =======================
+
+.attributes-section {
+  .style-selector {
+    margin-bottom: $spacing-lg;
+    
+    .style-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: $spacing-sm;
+      margin-top: $spacing-md;
+    }
+  }
+  
+  .attribute-item {
+    @include card-base;
+    padding: $spacing-md;
+    margin-bottom: $spacing-md;
+    
+    .attribute-header {
+      @include flex-between;
+      margin-bottom: $spacing-sm;
+      
+      .attribute-name {
+        font-weight: $font-medium;
+        color: $text-primary;
+      }
+      
+      .attribute-probability {
+        @include badge($surface-light, $text-muted);
+        font-size: $font-xs;
+      }
+    }
+    
+    .attribute-value {
+      color: $text-secondary;
+      font-size: $font-sm;
+    }
+  }
+  
+  .rarity-indicator {
+    @include flex-center;
+    gap: $spacing-sm;
+    padding: $spacing-md;
+    background: linear-gradient(135deg, $primary-blue 0%, $primary-purple 100%);
+    border-radius: $border-radius-lg;
+    color: $text-primary;
+    margin-top: $spacing-lg;
+    
+    .rarity-label {
+      font-weight: $font-semibold;
+    }
+    
+    .rarity-percentage {
+      @include badge(rgba(255, 255, 255, 0.2), $text-primary);
+    }
+  }
+}
+
+// 🖼️ COLUMNA DE RESULTADOS
+// ========================
+
+.results-section {
+  .generation-preview {
+    @include card-base;
+    text-align: center;
+    margin-bottom: $spacing-lg;
+    
+    .preview-placeholder {
+      width: 100%;
+      height: 300px;
+      background: linear-gradient(135deg, $surface-dark 0%, $surface-medium 100%);
+      border-radius: $border-radius-lg;
+      @include flex-center;
+      flex-direction: column;
+      color: $text-muted;
+      
+      .placeholder-icon {
+        font-size: $font-3xl;
+        margin-bottom: $spacing-md;
+      }
+      
+      .placeholder-text {
+        font-size: $font-base;
+      }
+    }
+    
+    .preview-image {
+      width: 100%;
+      height: auto;
+      border-radius: $border-radius-lg;
+      box-shadow: $shadow-lg;
+    }
+  }
+  
+  .generation-actions {
+    @include flex-column;
+    gap: $spacing-md;
+    
+    .action-button {
+      width: 100%;
+    }
+  }
+  
+  .metadata-preview {
+    @include card-base;
+    margin-top: $spacing-lg;
+    
+    .metadata-item {
+      @include flex-between;
+      padding: $spacing-sm 0;
+      border-bottom: 1px solid $border-secondary;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      .metadata-key {
+        color: $text-muted;
+        font-size: $font-sm;
+      }
+      
+      .metadata-value {
+        color: $text-primary;
+        font-size: $font-sm;
+        font-weight: $font-medium;
+      }
+    }
+  }
+}
+
+// 🎪 COMPONENTES ESPECÍFICOS CREATOR
+// ==================================
+
+// Loader específico del Creator
+.creator-loader {
+  @include flex-center;
+  flex-direction: column;
+  padding: $spacing-2xl;
+  
+  .loader-spinner {
+    @include spinner($size-xl, $accent-orange);
+    margin-bottom: $spacing-lg;
+  }
+  
+  .loader-text {
+    color: $text-secondary;
+    font-size: $font-base;
+    text-align: center;
+    
+    &.loading-dots::after {
+      content: '...';
+      animation: loadingDots 1.5s infinite;
+    }
+  }
+}
+
+// Progress bar para generación
+.generation-progress {
+  width: 100%;
+  height: 8px;
+  background-color: $surface-medium;
+  border-radius: $border-radius-full;
+  overflow: hidden;
+  margin: $spacing-md 0;
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, $primary-pink 0%, $primary-purple 100%);
+    border-radius: $border-radius-full;
+    transition: width $transition-slow ease-out;
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        transparent 100%
+      );
+      animation: shimmer 2s infinite;
+    }
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+// 🌟 EFECTOS ESPECIALES
+// =====================
+
+// Glow effect para elementos activos
+.creator-glow {
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, $primary-pink, $primary-blue, $primary-purple);
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity $transition-normal ease-out;
+  }
+  
+  &.active::before {
+    opacity: 0.5;
+    animation: pulse 2s infinite;
+  }
+}
+
+// Floating animation para elementos destacados
+.creator-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+// 📱 RESPONSIVE CREATOR
+// ====================
+
+@include mobile {
+  .creator-container {
+    gap: $spacing-sm;
+  }
+  
+  .upload-area {
+    padding: $spacing-lg;
+    min-height: 150px;
+    
+    .upload-icon {
+      font-size: $font-2xl;
+    }
+  }
+  
+  .generation-preview .preview-placeholder {
+    height: 200px;
+  }
+  
+  .attribute-item {
+    padding: $spacing-sm;
+  }
+}
+
+@include tablet {
+  .creator-container {
+    gap: $spacing-md;
+  }
+  
+  .upload-area {
+    min-height: 180px;
+  }
+}

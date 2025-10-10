@@ -1,0 +1,109 @@
+// ============================================
+// TIPOGRAFÍA - ESTILOS DE TEXTO
+// ============================================
+
+// Headings (encabezados)
+h1, h2, h3, h4, h5, h6 {
+  font-weight: $font-semibold;
+  line-height: 1.2;
+  margin-bottom: $spacing-md;
+}
+
+h1 {
+  font-size: $font-3xl;
+  
+  @include mobile {
+    font-size: $font-2xl;
+  }
+}
+
+h2 {
+  font-size: $font-2xl;
+  
+  @include mobile {
+    font-size: $font-xl;
+  }
+}
+
+h3 {
+  font-size: $font-xl;
+  
+  @include mobile {
+    font-size: $font-lg;
+  }
+}
+
+h4 {
+  font-size: $font-lg;
+}
+
+h5 {
+  font-size: $font-base;
+}
+
+h6 {
+  font-size: $font-sm;
+}
+
+// Párrafos
+p {
+  margin-bottom: $spacing-md;
+  line-height: 1.6;
+}
+
+// Texto pequeño
+small {
+  font-size: $font-sm;
+  color: $text-muted;
+}
+
+// Texto destacado
+strong, b {
+  font-weight: $font-bold;
+}
+
+// Texto en cursiva
+em, i {
+  font-style: italic;
+}
+
+// Código inline
+code {
+  font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+  background-color: $surface-medium;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $border-radius-sm;
+  font-size: 0.9em;
+}
+
+// Enlaces de texto
+a {
+  color: $primary-blue;
+  transition: color $transition-normal ease-out;
+  
+  &:hover {
+    color: $primary-blue-light;
+  }
+}
+
+// Clases utilitarias de tipografía
+.text-xs { font-size: $font-xs; }
+.text-sm { font-size: $font-sm; }
+.text-base { font-size: $font-base; }
+.text-lg { font-size: $font-lg; }
+.text-xl { font-size: $font-xl; }
+.text-2xl { font-size: $font-2xl; }
+.text-3xl { font-size: $font-3xl; }
+
+.font-normal { font-weight: $font-normal; }
+.font-medium { font-weight: $font-medium; }
+.font-semibold { font-weight: $font-semibold; }
+.font-bold { font-weight: $font-bold; }
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.text-primary { color: $text-primary; }
+.text-secondary { color: $text-secondary; }
+.text-muted { color: $text-muted; }

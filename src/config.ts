@@ -17,19 +17,3 @@ export const GLOBAL_ATTRIBUTE_CONFIG: GlobalAttributeConfig[] = [
      { key: 'pose', label: 'Pose', defaultPrompt: 'Same pose, direction, and zoom' },
      { key: 'style', label: 'Art Style', defaultPrompt: 'Identical art style' }
 ];
-
-// Hedera Namespace para WalletConnect/Reown
-export const HEDERA_NAMESPACE = {
-    hedera: {
-        // Formato CAIP-2 soportado por WalletConnect: 'namespace:chainId'
-        // Permitimos varias redes para que el wallet liste cualquier cuenta disponible.
-        chains: ['hedera:testnet', 'hedera:mainnet', 'hedera:previewnet'],
-        methods: [
-            'hedera_getBalance',
-            'hedera_signTransaction',
-            'hedera_sendTransaction',
-            'hedera_signMessage',
-        ],
-        events: ['accountsChanged', 'chainChanged'],
-    },
-};

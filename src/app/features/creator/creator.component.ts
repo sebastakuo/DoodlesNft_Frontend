@@ -8,7 +8,7 @@ import { ATTRIBUTE_CONFIG, GLOBAL_ATTRIBUTE_CONFIG, MAX_MODIFICATIONS } from '..
 @Component({
   selector: 'app-creator',
   templateUrl: './creator.component.html',
-  styleUrls: ['./creator.component.css'],
+  styleUrls: ['./creator.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, HttpClientModule],
   host: {
@@ -69,6 +69,7 @@ export class CreatorComponent implements OnInit {
 
   readonly MAX_MODIFICATIONS = MAX_MODIFICATIONS;
 
+  // Crea la lista inicial de atributos con valores por defecto
   private initializeAttributes(): Attribute[] {
     return ATTRIBUTE_CONFIG.map(config => ({
       ...config,
@@ -79,6 +80,7 @@ export class CreatorComponent implements OnInit {
     }));
   }
 
+  // Muestra mensajes de notificación temporales al usuario
   showToast(message: string): void {
     // Limpiar timeout anterior si existe
     if ((this as any).toastTimeout) {
@@ -92,6 +94,7 @@ export class CreatorComponent implements OnInit {
     }, 3000);
   }
 
+  // Inicializa la aplicación y muestra el mensaje de sugerencia si es la primera vez
   ngOnInit(): void {
     // Verificar si ya se mostró el mensaje flotante en esta sesión
     const suggestionShown = sessionStorage.getItem('suggestionShown');
@@ -110,6 +113,7 @@ export class CreatorComponent implements OnInit {
     }
   }
 
+  // Cierra el mensaje flotante de sugerencia
   closeSuggestion(): void {
     this.showFloatingSuggestion.set(false);
     sessionStorage.setItem('suggestionShown', 'true');
@@ -117,16 +121,19 @@ export class CreatorComponent implements OnInit {
 
   // --- File Handling ---
 
+  // Evento cuando el usuario arrastra archivos sobre la zona de subida
   onDragOver(event: DragEvent): void {
     event.preventDefault();
     (event.currentTarget as HTMLElement).classList.add('border-pink-500');
   }
 
+  // Evento cuando el usuario sale de la zona de arrastre
   onDragLeave(event: DragEvent): void {
     event.preventDefault();
     (event.currentTarget as HTMLElement).classList.remove('border-pink-500');
   }
 
+  // Evento cuando el usuario suelta archivos en la zona de subida
   onDrop(event: DragEvent): void {
     event.preventDefault();
     (event.currentTarget as HTMLElement).classList.remove('border-pink-500');
@@ -135,6 +142,7 @@ export class CreatorComponent implements OnInit {
     }
   }
 
+  // Evento cuando el usuario selecciona un archivo desde el input
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {
@@ -142,21 +150,17 @@ export class CreatorComponent implements OnInit {
     }
   }
 
+  // Procesa el archivo de imagen seleccionado y lo prepara para análisis
   private handleFile(file: File): void {
     if (!file.type.startsWith('image/')) {
       this.showToast("Please select an image file.");
       return;
     }
     
-    // Validar estado antes de proceder
-    if (this.isAnalyzing() || this.isGenerating()) {
-      this.showToast("Please wait for the current operation to finish.");
-      return;
-    }
-    
-    // Limpiar estado anterior
-    this.aiAnalysisData.set(null);
+    // Invalidar cualquier análisis en curso
+    this.currentAnalysisId++;
     this.isAnalyzing.set(false);
+    this.aiAnalysisData.set(null);
     
     // Mostrar mensaje de optimización
     this.showToast("🔄 Optimizando imagen para análisis...");
@@ -167,8 +171,8 @@ export class CreatorComponent implements OnInit {
       this.baseImageURL.set(imageUrl);
       
       try {
-        // Comprimir imagen para análisis más rápido
-        const compressedBase64 = await this.compressImage(file, 1024, 0.8);
+        // Comprimir imagen manteniendo alta calidad para análisis
+        const compressedBase64 = await this.compressImage(file, 2048, 1.0);
         this.base64ImageData.set(compressedBase64.split(',')[1]);
         await this.runImageAnalysis();
       } catch (error) {
@@ -183,7 +187,8 @@ export class CreatorComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
-  private compressImage(file: File, maxWidth: number = 1024, quality: number = 0.8): Promise<string> {
+  // Comprime una imagen manteniendo la máxima calidad posible
+  private compressImage(file: File, maxWidth: number = 2048, quality: number = 1.0): Promise<string> {
     return new Promise((resolve, reject) => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
@@ -195,16 +200,29 @@ export class CreatorComponent implements OnInit {
       const img = new Image();
       
       img.onload = () => {
-        // Calcular nuevas dimensiones manteniendo aspect ratio
-        const ratio = Math.min(maxWidth / img.width, maxWidth / img.height);
-        canvas.width = img.width * ratio;
-        canvas.height = img.height * ratio;
+        // Solo redimensionar si la imagen es más grande que el límite
+        let finalWidth = img.width;
+        let finalHeight = img.height;
         
-        // Dibujar imagen redimensionada
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        if (img.width > maxWidth || img.height > maxWidth) {
+          const ratio = Math.min(maxWidth / img.width, maxWidth / img.height);
+          finalWidth = Math.floor(img.width * ratio);
+          finalHeight = Math.floor(img.height * ratio);
+        }
         
-        // Convertir a base64 comprimido
-        const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+        canvas.width = finalWidth;
+        canvas.height = finalHeight;
+        
+        // Configurar contexto para máxima calidad
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        
+        // Dibujar imagen con alta calidad
+        ctx.drawImage(img, 0, 0, finalWidth, finalHeight);
+        
+        // Usar PNG para preservar calidad (sin pérdida) o JPEG con calidad máxima
+        const mimeType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+        const compressedBase64 = canvas.toDataURL(mimeType, quality);
         resolve(compressedBase64);
       };
       
@@ -216,68 +234,66 @@ export class CreatorComponent implements OnInit {
   // --- AI Analysis ---
 
   private analysisPromise: Promise<void> | null = null;
+  private currentAnalysisId = 0;
 
+  // Inicia el análisis de la imagen con IA
   async runImageAnalysis(): Promise<void> {
-    // Prevenir análisis simultáneos
-    if (this.analysisPromise) {
-      return this.analysisPromise;
-    }
-
     const base64 = this.base64ImageData();
     if (!base64) return;
 
-    this.analysisPromise = this.performAnalysis(base64);
+    // Incrementar ID y cancelar análisis anterior
+    const analysisId = ++this.currentAnalysisId;
+    
+    // Permitir nuevo análisis inmediatamente
+    this.analysisPromise = this.performAnalysis(base64, analysisId);
     
     try {
       await this.analysisPromise;
     } finally {
-      this.analysisPromise = null;
+      // Solo limpiar si es el análisis actual
+      if (analysisId === this.currentAnalysisId) {
+        this.analysisPromise = null;
+      }
     }
   }
 
-  private async performAnalysis(base64: string): Promise<void> {
-    // Siempre resetear estado antes de iniciar
-    this.isAnalyzing.set(false);
-    
+  // Ejecuta el análisis de la imagen enviándola al servicio de IA
+  private async performAnalysis(base64: string, analysisId: number): Promise<void> {
     // Pequeño delay para que la UI se actualice
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 60));
     
     this.isAnalyzing.set(true);
+    this.showToast('🤖 Analizando con IA...');
     this.cdr.detectChanges();
-
-    // Mostrar progreso paso a paso
-    const progressTimeout1 = setTimeout(() => {
-      if (this.isAnalyzing()) {
-        this.showToast('🤖 Analizando con IA... Esto puede tomar 30-60 segundos');
-      }
-    }, 3000);
-
-    const progressTimeout2 = setTimeout(() => {
-      if (this.isAnalyzing()) {
-        this.showToast('⏳ Análisis avanzado en progreso... Casi terminando');
-      }
-    }, 15000);
 
     try {
       const analysis = await this.geminiService.analyzeImage(base64).toPromise();
+      
+      // Verificar si este análisis aún es relevante
+      if (analysisId !== this.currentAnalysisId) {
+        return; // Resultado obsoleto, ignorar
+      }
+      
       const aiResult = analysis?.result ?? analysis;
       this.aiAnalysisData.set(aiResult);
       this.updateAttributeKeywords(aiResult);
       this.showToast("✅ ¡Análisis completado con éxito!");
     } catch (error) {
-      console.error("Image analysis failed:", error);
-      this.showToast("❌ Error en análisis. Intenta con una imagen más pequeña.");
+      // Solo mostrar error si es el análisis actual
+      if (analysisId === this.currentAnalysisId) {
+        console.error("Image analysis failed:", error);
+        this.showToast("❌ Error en análisis. Intenta con una imagen más pequeña.");
+      }
     } finally {
-      // Limpiar timeouts
-      clearTimeout(progressTimeout1);
-      clearTimeout(progressTimeout2);
-      
-      // Siempre resetear en finally
-      this.isAnalyzing.set(false);
-      this.cdr.detectChanges();
+      // Solo resetear estado si es el análisis actual
+      if (analysisId === this.currentAnalysisId) {
+        this.isAnalyzing.set(false);
+        this.cdr.detectChanges();
+      }
     }
   }
 
+  // Actualiza los atributos con las palabras clave detectadas por la IA
   private updateAttributeKeywords(analysis: AIAnalysisData): void {
     const mapping: { [key: string]: string } = {
         background: analysis.backgroundDescription,
@@ -293,6 +309,7 @@ export class CreatorComponent implements OnInit {
     );
   }
   
+  // Obtiene la descripción global de un atributo analizado por IA
   getGlobalAttributeDescription(key: string): string {
     const data = this.aiAnalysisData();
     if (!data) return 'N/A';
@@ -306,6 +323,7 @@ export class CreatorComponent implements OnInit {
 
   // --- Attribute Management ---
 
+  // Restaura los atributos con las palabras clave de IA si existe análisis previo
   private restoreAttributesWithAIKeywords(): void {
     // Restaurar atributos con las palabras clave de IA si existe análisis
     this.attributes.set(this.initializeAttributes());
@@ -315,12 +333,12 @@ export class CreatorComponent implements OnInit {
     }
   }
 
+  // Cambia entre modo completo y modo base de trabajo
   setWorkingMode(mode: 'full' | 'base'): void {
     if (this.isGenerating() || this.isAnalyzing()) {
       return;
     }
     
-    const previousMode = this.workingMode();
     this.workingMode.set(mode);
     
     // Siempre limpiar referencias al cambiar de modo para evitar conflictos
@@ -354,6 +372,7 @@ export class CreatorComponent implements OnInit {
     }
   }
 
+  // Activa o desactiva un atributo para modificación (controla límites de modificaciones)
   toggleAttribute(key: string): void {
     const currentAttr = this.attributes().find(a => a.key === key);
     const isDeactivating = currentAttr?.isActive;
@@ -390,6 +409,7 @@ export class CreatorComponent implements OnInit {
     );
   }
   
+  // Actualiza el texto descriptivo de un atributo cuando el usuario escribe
   updateAttributePrompt(key: string, event: Event): void {
       const value = (event.target as HTMLInputElement).value;
       this.attributes.update(attrs => 
@@ -397,6 +417,7 @@ export class CreatorComponent implements OnInit {
       );
   }
 
+  // Maneja la subida de imágenes de referencia para un atributo específico
   async onReferenceFileSelected(event: Event, key: string): Promise<void> {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {
@@ -427,6 +448,7 @@ export class CreatorComponent implements OnInit {
     }
   }
 
+  // Redimensiona una imagen a las dimensiones especificadas
   private resizeImage(file: File, width: number, height: number): Promise<{resizedUrl: string, resizedBase64: string}> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -456,6 +478,7 @@ export class CreatorComponent implements OnInit {
     });
   }
 
+  // Elimina una imagen de referencia de un atributo
   deleteReference(key: string): void {
     this.attributeReferences.update(refs => {
       const newRefs = { ...refs };
@@ -467,6 +490,7 @@ export class CreatorComponent implements OnInit {
     );
   }
 
+  // Establece la cantidad de variaciones a generar (1-4)
   setVariationCount(count: number): void {
     if (!this.isGenerating()) {
       this.variationCount.set(count);
@@ -475,6 +499,7 @@ export class CreatorComponent implements OnInit {
 
   // --- Image Generation ---
 
+  // Genera nuevas imágenes basadas en la imagen base y las modificaciones seleccionadas
   async onGenerateClick(): Promise<void> {
     if (!this.base64ImageData()) {
       this.showToast("Please upload a base image first.");
@@ -514,15 +539,6 @@ export class CreatorComponent implements OnInit {
           this.generatedResults.update(results =>
             results.map(r => r.id === result.id ? { ...r, isLoading: false, imageUrl } : r)
           );
-          // Guardar en la librería (localStorage)
-          try {
-            const key = 'libreriaImagenes';
-            const actuales = JSON.parse(localStorage.getItem(key) || '[]');
-            if (!actuales.includes(imageUrl)) {
-              actuales.unshift(imageUrl);
-              localStorage.setItem(key, JSON.stringify(actuales.slice(0, 50)));
-            }
-          } catch (e) { /* ignorar errores de almacenamiento */ }
         } catch (error) {
           const errorMessage = (error as Error).message || 'Failed to generate image';
           console.error("Image generation failed:", error);
@@ -538,19 +554,21 @@ export class CreatorComponent implements OnInit {
     }
   }
 
+  // Establece una imagen generada como nueva imagen base para futuras modificaciones
   /**
    * Sets a generated image as the new base image for further modifications.
    * @param imageUrl The data URL of the image to set as the new base.
    */
   async selectAsBaseImage(imageUrl: string): Promise<void> {
-    if (this.isGenerating() || this.isAnalyzing()) {
-      this.showToast('Please wait for the current operation to finish.');
+    if (this.isGenerating()) {
+      this.showToast('Please wait for generation to finish.');
       return;
     }
 
-    // Limpiar completamente el estado anterior
+    // Invalidar análisis en curso e incrementar ID
+    this.currentAnalysisId++;
     this.isAnalyzing.set(false);
-    this.aiAnalysisData.set(null); // Limpiar análisis anterior
+    this.aiAnalysisData.set(null);
     
     // Mostrar mensaje de optimización
     this.showToast("🔄 Optimizando imagen para análisis...");
@@ -563,8 +581,8 @@ export class CreatorComponent implements OnInit {
       // Crear un File object desde el blob
       const file = new File([blob], 'generated-image.png', { type: 'image/png' });
       
-      // Comprimir la imagen usando la misma función que handleFile
-      const compressedBase64 = await this.compressImage(file, 1024, 0.8);
+      // Comprimir la imagen manteniendo alta calidad
+      const compressedBase64 = await this.compressImage(file, 2048, 1.0);
       
       // Set the compressed image
       this.baseImageURL.set(imageUrl); // Mostrar la original en UI
@@ -597,6 +615,7 @@ export class CreatorComponent implements OnInit {
   
   // --- Modal Navigation ---
   
+  // Abre el modal para ver una imagen en pantalla completa
   openModal(imageUrl: string): void {
     const results = this.viewableResults();
     const index = results.findIndex(r => r.imageUrl === imageUrl);
@@ -605,10 +624,12 @@ export class CreatorComponent implements OnInit {
     }
   }
 
+  // Cierra el modal de imagen en pantalla completa
   closeModal(): void {
     this.modalImageIndex.set(null);
   }
 
+  // Navega a la siguiente imagen en el modal
   nextModalImage(): void {
     const index = this.modalImageIndex();
     const total = this.viewableResults().length;
@@ -617,6 +638,7 @@ export class CreatorComponent implements OnInit {
     }
   }
 
+  // Navega a la imagen anterior en el modal
   prevModalImage(): void {
     const index = this.modalImageIndex();
     const total = this.viewableResults().length;
@@ -625,6 +647,7 @@ export class CreatorComponent implements OnInit {
     }
   }
   
+  // Maneja las teclas del teclado para navegar en el modal
   handleKeyboardEvents(event: KeyboardEvent): void {
     if (this.modalImageUrl()) { // Check if modal is open
       if (event.key === 'ArrowRight') {
@@ -637,6 +660,7 @@ export class CreatorComponent implements OnInit {
     }
   }
 
+  // Construye el prompt final que será enviado a la IA para generar imágenes
   private constructFinalPrompt(): string {
     const analysis = this.aiAnalysisData();
     if (!analysis) {
@@ -687,6 +711,7 @@ export class CreatorComponent implements OnInit {
     return `MASTER PROMPT FOR IMAGE GENERATION\n\n${coreRules}${maintainSection}${modifySection}`;
   }
 
+  // Construye las partes finales (prompt + imágenes) que serán enviadas a la IA
   private constructFinalParts(): any[] {
     const finalPrompt = this.constructFinalPrompt();
     
@@ -705,6 +730,7 @@ export class CreatorComponent implements OnInit {
     return [finalPromptPart, baseImagePart, ...referenceParts];
   }
   
+  // Descarga una imagen generada al dispositivo del usuario
   downloadImage(event: MouseEvent, imageUrl: string): void {
     event.stopPropagation();
     const a = document.createElement('a');
@@ -717,12 +743,16 @@ export class CreatorComponent implements OnInit {
 
   // --- UI Control ---
 
+  // Reinicia toda la aplicación a su estado inicial
   reset(): void {
     // Validar que no haya operaciones en curso
     if (this.isAnalyzing() || this.isGenerating()) {
       this.showToast('Please wait for the current operation to finish.');
       return;
     }
+    
+    // Invalidar cualquier análisis en curso
+    this.currentAnalysisId++;
     
     // Resetear datos principales
     this.base64ImageData.set(null);

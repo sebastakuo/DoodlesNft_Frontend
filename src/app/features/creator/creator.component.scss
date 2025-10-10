@@ -1,0 +1,1184 @@
+// ============================================
+// CREATOR COMPONENT - REFACTORIZADO CON SCSS
+// ============================================
+
+// Importar variables y mixins
+@import '../../../styles/abstracts/variables';
+@import '../../../styles/abstracts/mixins';
+
+/* ========================================
+   EFECTOS VISUALES Y ANIMACIONES GLOBALES
+   ======================================== */
+
+/* Clase para crear tarjetas con efecto de cristal (glassmorphism) */
+.glass-card {
+	@include glass-effect();
+}
+
+/* Spinner de carga circular animado */
+.loader {
+	border: 4px solid rgba(255, 255, 255, 0.2);
+	border-top: 4px solid $accent-orange;
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	animation: spin 1s linear infinite;
+}
+
+/* Animación de rotación continua para elementos de carga */
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+/* ========================================
+   COMPONENTES DE ENTRADA DE ARCHIVOS
+   ======================================== */
+
+/* Contenedor para ocultar el input de archivo nativo y personalizarlo */
+.file-input-wrapper {
+	position: relative;
+	overflow: hidden;
+	display: inline-block;
+}
+
+/* Input de archivo invisible que se superpone sobre el botón personalizado */
+.file-input-wrapper input[type=file] {
+	font-size: 100px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	opacity: 0;
+	cursor: pointer;
+}
+/* ========================================
+   BARRAS DE DESPLAZAMIENTO PERSONALIZADAS
+   ======================================== */
+
+/* Ancho de la barra de desplazamiento en navegadores Webkit */
+::-webkit-scrollbar { width: 8px; }
+
+/* Fondo del canal de la barra de desplazamiento */
+::-webkit-scrollbar-track { background: $bg-primary; }
+
+/* Estilo del thumb (deslizador) de la barra de desplazamiento */
+::-webkit-scrollbar-thumb {
+	background-color: $accent-orange;
+	border-radius: $rounded-lg;
+	border: 2px solid $bg-primary;
+}
+/* ========================================
+   BOTONES DE ALTERNANCIA Y CONTROLES
+   ======================================== */
+
+/* Botón de alternancia de estilos con diseño optimizado */
+.style-toggle-btn {
+	@include button-base;
+	background-color: $surface-medium;
+	color: $text-secondary;
+	border: 1px solid $border-secondary;
+	width: auto;
+	min-width: 120px;
+	max-width: 180px;
+	height: $height-input;
+	flex-shrink: 0;
+
+	/* Estado activo */
+	&.active {
+		background-color: $primary-purple;
+		color: $text-primary;
+		border-color: $primary-purple-light;
+	}
+}
+/* Etiquetas de palabras clave IA con estilo oscuro y transiciones suaves */
+.ai-keyword-tag { 
+	transition: opacity $transition-slow ease-in-out;
+	background-color: $surface-lighter !important;
+	color: $text-primary !important;
+	border: 1px solid $border-secondary;
+	border-radius: $border-radius-md;
+	padding: $spacing-sm $spacing-md;
+	font-size: $font-xs;
+	line-height: 1.2;
+	text-align: left;
+	width: 100%;
+	max-width: 100%;
+	word-wrap: break-word;
+	white-space: normal;
+	overflow: hidden;
+	display: block;
+	box-sizing: border-box;
+}
+
+/* ========================================
+   SELECTORES DE MODO DE TRABAJO
+   ======================================== */
+
+/* Contenedor del selector de modo con animaciones de elevación */
+.mode-selector {
+    transition: all $transition-fast ease-in-out;
+}
+
+/* Efecto hover para el selector de modo - Eleva el elemento */
+.mode-selector:hover {
+    transform: translateY(-#{$spacing-xs});
+    box-shadow: $shadow-md;
+}
+
+/* Estado activo del selector de modo con menor elevación */
+.mode-selector.active {
+    transform: translateY(-#{$spacing-xs / 2});
+    box-shadow: $shadow-lg;
+}
+
+/* Botón radio personalizado para selección de modo */
+.mode-radio {
+    transition: all $transition-fast ease-in-out;
+}
+
+/* Efecto hover para el botón radio - Aumenta el grosor del borde */
+.mode-radio:hover {
+    border-width: $border-thick;
+}
+
+/* ========================================
+   EFECTOS DE SUGERENCIAS DE PERSONAJES BASE
+   ======================================== */
+
+/* Contenedor de sugerencia con animación de brillo sutil dorado */
+.base-character-suggestion {
+    animation: subtle-glow 3s ease-in-out infinite;
+}
+
+/* Animación de brillo que alterna la intensidad de la sombra */
+@keyframes subtle-glow {
+    0%, 100% {
+        box-shadow: 0 0 $shadow-blur-sm rgba($color-warning, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 $shadow-blur-md rgba($color-warning, 0.4);
+    }
+}
+
+/* Icono con animación de pulso suave */
+.suggestion-icon {
+    animation: gentle-pulse 2s ease-in-out infinite;
+}
+
+/* Animación de pulso que escala y cambia opacidad gradualmente */
+@keyframes gentle-pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+/* ========================================
+   LAYOUT Y ESTRUCTURA DE CONTENEDORES
+   ======================================== */
+
+/* Contenedor principal de personalización con padding responsive */
+.customize-container {
+    margin: 0 auto;
+    padding: $spacing-md $spacing-md;
+    text-align: center;
+    margin-top: $spacing-md;
+}
+
+/* Padding aumentado en pantallas medianas y grandes */
+@media (min-width: $breakpoint-md) {
+    .customize-container {
+        padding: $spacing-md $spacing-xl;
+    }
+}
+
+/* Título principal de la sección de personalización */
+.customize-title {
+    font-size: $font-3xl;
+    font-weight: $font-bold;
+    margin-bottom: $spacing-sm;
+}
+
+/* Descripción con texto gris y ancho máximo centrado */
+.customize-description {
+    font-size: $font-sm;
+    color: $text-muted;
+    max-width: $container-lg;
+    margin: 0 auto;
+}
+
+/* Tamaño de fuente aumentado en pantallas medianas */
+@media (min-width: 768px) {
+    .customize-description {
+        font-size: 1rem;
+    }
+}
+
+/* Contenedor principal con padding responsive y flex-grow */
+.main-container {
+    margin: 0 auto;
+    padding: 1rem;
+    flex-grow: 1;
+}
+
+/* Padding aumentado en pantallas medianas y grandes */
+@media (min-width: $breakpoint-md) {
+    .main-container {
+        padding: $spacing-xl;
+    }
+}
+
+/* Grid principal que cambia de 1 a 3 columnas según el tamaño de pantalla */
+.main-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-xl;
+    align-items: stretch;
+}
+
+/* Layout de 3 columnas para pantallas grandes */
+@media (min-width: $breakpoint-lg) {
+    .main-grid {
+        grid-template-columns: 0.65fr 0.8fr 1.2fr;
+        align-items: stretch;
+    }
+}
+
+/* Layout de 2 columnas para pantallas medianas */
+@media (min-width: $breakpoint-md) and (max-width: #{$breakpoint-lg - 1px}) {
+    .main-grid {
+        grid-template-columns: 1fr 1fr;
+        align-items: stretch;
+    }
+}
+
+/* ========================================
+   COLUMNAS ESPECÍFICAS DEL LAYOUT
+   ======================================== */
+
+/* Columnas con layout vertical optimizado */
+.controls-column,
+.upload-column,
+.attributes-column {
+    @include flex-column;
+    gap: $spacing-lg;
+    height: 100%;
+}
+
+.results-column {
+    @include flex-column;
+    gap: $spacing-lg;
+    height: 100%;
+}
+
+/* Tarjetas de cristal dentro de la columna de atributos con flex expandido */
+.attributes-column .glass-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Columna de resultados con altura fija y overflow controlado */
+.results-column {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+    height: 100%;
+}
+
+/* Tarjetas de cristal en la columna de resultados con altura específica */
+.results-column .glass-card {
+    height: 920px;
+    max-height: 920px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Altura aumentada para pantallas medianas */
+@media (min-width: $breakpoint-md) {
+    .results-column .glass-card {
+        height: 980px;
+        max-height: 980px;
+    }
+}
+
+/* Altura máxima para pantallas grandes */
+@media (min-width: $breakpoint-lg) {
+    .results-column .glass-card {
+        height: 1020px;
+        max-height: 1020px;
+    }
+}
+
+/* ========================================
+   ENCABEZADOS DE PASOS Y NUMERACIÓN
+   ======================================== */
+
+.step-header {
+    @include flex-row(center, space-between, $spacing-sm);
+    font-size: $font-xl;
+    font-weight: $font-semibold;
+    margin-bottom: $spacing-md;
+}
+
+.step-header-content {
+    @include flex-row(center, flex-start, $spacing-sm);
+}
+
+.step-number {
+    @include flex-center;
+    color: $color-white;
+    border-radius: $rounded-full;
+    height: $spacing-xl;
+    width: $spacing-xl;
+
+    &-1 { background-color: $accent-pink; }
+    &-2 { background-color: $accent-blue; }
+    &-3 { background-color: $accent-purple; }
+}
+
+/* ========================================
+   BOTÓN DE RESET Y CONTROLES AUXILIARES
+   ======================================== */
+
+/* Botón circular de reset con color gris y efecto hover */
+.reset-btn {
+    background-color: $surface-dark;
+    color: $color-white;
+    font-weight: $font-bold;
+    padding: $spacing-sm;
+    border-radius: $rounded-full;
+    transition: background-color $transition-base ease;
+    border: none;
+    cursor: pointer;
+}
+
+/* Efecto hover del botón de reset */
+.reset-btn:hover {
+    background-color: $surface-medium;
+}
+
+/* ========================================
+   ZONA DE ARRASTRE DE ARCHIVOS
+   ======================================== */
+
+.drop-zone {
+    @include flex-center;
+    @include flex-column;
+    gap: $spacing-sm;
+    width: 100%;
+    height: $container-sm;
+    border: $border-md dashed $border-secondary;
+    border-radius: $rounded-lg;
+    background-color: $glass-secondary;
+    margin-bottom: $spacing-md;
+    transition: border-color $transition-base ease;
+    cursor: pointer;
+    position: relative;
+
+    &:hover {
+        border-color: $accent-pink;
+        
+        .drop-zone-overlay {
+            opacity: 1;
+        }
+    }
+}
+
+.drop-zone-overlay {
+    @include flex-center;
+    @include flex-column;
+    gap: $spacing-sm;
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    opacity: 0;
+    transition: opacity $transition-base ease;
+    border-radius: $rounded-lg;
+}
+
+.drop-zone-icon {
+    width: $icon-lg;
+    height: $icon-lg;
+    color: $color-white;
+}
+
+.drop-zone-text {
+    color: $color-white;
+    font-weight: $font-semibold;
+}
+
+/* Icono placeholder cuando no hay imagen */
+.drop-zone-placeholder-icon {
+    height: $icon-lg;
+    width: $icon-lg;
+    color: $text-muted;
+    margin-bottom: $spacing-sm;
+}
+
+/* Texto placeholder cuando no hay imagen */
+.drop-zone-placeholder-text {
+    color: $text-disabled;
+}
+
+/* ========================================
+   PREVISUALIZACIÓN DE IMÁGENES
+   ======================================== */
+
+/* Imagen de previsualización con ajuste automático de contenido */
+.image-preview {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    border-radius: $rounded-md;
+}
+
+/* ========================================
+   SECCIÓN DE REGLAS GLOBALES
+   ======================================== */
+
+/* Contenedor de reglas globales con fondo semi-transparente */
+.global-rules-container {
+    margin-top: $spacing-md;
+    padding: $spacing-md;
+    background-color: $glass-secondary;
+    border-radius: $rounded-lg;
+}
+
+/* Título de la sección de reglas globales */
+.global-rules-title {
+    font-size: $font-sm;
+    font-weight: $font-semibold;
+    color: $text-disabled;
+    margin-bottom: $spacing-sm;
+    border-bottom: $border-thin solid $border-primary;
+    padding-bottom: $spacing-xs;
+}
+
+/* Grid de dos columnas para mostrar reglas y valores */
+.global-rules-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: $spacing-md;
+    row-gap: $spacing-xs;
+    align-items: center;
+    font-size: $font-sm;
+}
+
+/* Etiquetas de las reglas con color gris */
+.global-rules-label {
+    color: $text-disabled;
+    font-weight: $font-medium;
+}
+
+/* Valores de las reglas con texto blanco y overflow controlado */
+.global-rules-value {
+    color: $color-white;
+    @include text-truncate;
+}
+
+/* ========================================
+   BOTONES PRINCIPALES DE ACCIÓN
+   ======================================== */
+
+.file-input-btn {
+    @include button-variant($accent-pink, $color-white, $accent-pink-dark);
+    @include hover-elevate(1.05);
+    width: 100%;
+    padding: $spacing-sm $spacing-md;
+}
+
+.generate-btn {
+    @include button-variant($accent-orange, $color-white, $accent-orange-dark);
+    @include hover-elevate(1.05, 0 10px 15px -3px rgba($accent-orange, 0.5));
+    width: 100%;
+    padding: $spacing-md;
+    font-size: $font-lg;
+    gap: $spacing-sm;
+    box-shadow: 0 10px 15px -3px rgba($accent-orange, 0.3);
+
+    &:disabled {
+        background-color: $text-muted;
+        transform: scale(1);
+    }
+}
+
+/* ========================================
+   ESTILOS DE MODOS DE TRABAJO
+   ======================================== */
+
+/* Grid contenedor para los botones de selección de modo */
+.mode-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-md;
+    margin-bottom: $spacing-md;
+}
+
+/* Botón base para seleccionar modo de trabajo con bordes y transiciones */
+.mode-btn {
+    padding: $spacing-md;
+    border-radius: $rounded-lg;
+    border: $border-md solid;
+    transition: all $transition-fast ease;
+    text-align: left;
+    background: transparent;
+    cursor: pointer;
+}
+
+/* Estado deshabilitado del botón de modo */
+.mode-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Modo completo activo con color azul y fondo translúcido */
+.mode-btn-full.active {
+    border-color: $accent-blue;
+    background-color: rgba($accent-blue, 0.1);
+}
+
+/* Modo completo inactivo con colores grises neutros */
+.mode-btn-full:not(.active) {
+    border-color: $border-secondary;
+    background-color: $glass-tertiary;
+}
+
+/* Efecto hover para modo completo inactivo - borde azul claro */
+.mode-btn-full:not(.active):hover {
+    border-color: $accent-blue-light;
+}
+
+/* Modo base activo con color verde esmeralda y fondo translúcido */
+.mode-btn-base.active {
+    border-color: $accent-green;
+    background-color: rgba($accent-green, 0.1);
+}
+
+/* Modo base inactivo con colores grises neutros */
+.mode-btn-base:not(.active) {
+    border-color: $border-secondary;
+    background-color: $glass-tertiary;
+}
+
+/* Efecto hover para modo base inactivo - borde verde claro */
+.mode-btn-base:not(.active):hover {
+    border-color: $accent-green-light;
+}
+
+/* ========================================
+   COMPONENTES DE RADIO BUTTONS PERSONALIZADOS
+   ======================================== */
+
+/* Contenedor para radio button con espaciado horizontal */
+.mode-radio-container {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-sm;
+}
+
+/* Radio button circular personalizado con borde dinámico */
+.mode-radio {
+    width: $spacing-sm;
+    height: $spacing-sm;
+    border-radius: $rounded-full;
+    border: $border-md solid currentColor;
+    @include flex-center;
+}
+
+/* Punto interno del radio button que indica selección */
+.mode-radio-dot {
+    width: $spacing-xs;
+    height: $spacing-xs;
+    border-radius: $rounded-full;
+    background-color: currentColor;
+}
+
+/* Título del modo con texto blanco y peso de fuente destacado */
+.mode-title {
+    font-weight: $font-semibold;
+    color: $color-white;
+}
+
+/* Descripción del modo con texto gris y margen izquierdo */
+.mode-description {
+    @include tip-text($text-secondary);
+    margin-left: $spacing-lg;
+    font-style: normal;
+}
+
+/* ========================================
+   BADGES DE ESTADO DE MODO
+   ======================================== */
+
+.mode-badge {
+    @include badge-base(transparent, $text-secondary, $border-secondary);
+}
+
+.mode-badge-full {
+    @include badge-base(rgba($accent-blue, 0.2), $accent-blue-light, rgba($accent-blue, 0.3));
+}
+
+.mode-badge-base {
+    @include badge-base(rgba($accent-green, 0.2), $accent-green-light, rgba($accent-green, 0.3));
+}
+
+/* ========================================
+   SECCIÓN DE ATRIBUTOS Y CONTROLES
+   ======================================== */
+
+/* Grid vertical para lista de atributos que usa toda la altura disponible */
+.attributes-grid {
+    @include flex-column;
+    gap: $spacing-sm;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0; /* Permite que flex shrink funcione correctamente */
+}
+
+/* Fila horizontal de atributo con fondo oscuro y espaciado */
+.attribute-row {
+    @include flex-row(center, flex-start, $spacing-sm);
+    width: 100%;
+    min-height: $height-lg;
+    background-color: $glass-secondary;
+    border-radius: $rounded-lg;
+    padding: $spacing-sm;
+}
+
+/* Contenedor vertical para elementos de atributo complejos */
+.attribute-item {
+    @include flex-column;
+    gap: $spacing-sm;
+    width: 100%;
+    background-color: $glass-secondary;
+    border-radius: $rounded-lg;
+    padding: $spacing-sm;
+}
+
+/* Fila de botones dentro de un atributo con espaciado horizontal */
+.attribute-button-row {
+    @include flex-row(center, flex-start, $spacing-sm);
+    width: 100%;
+}
+
+/* Contenedor para descripciones de palabras clave IA */
+.ai-keyword-description {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    margin-top: $spacing-xs;
+}
+
+/* Controles de atributo con espaciado y flex expandible */
+.attribute-controls {
+    @include flex-row(center, flex-start, $spacing-sm);
+    flex: 1;
+}
+
+/* ========================================
+   BOTONES Y ELEMENTOS DE IMAGEN DE REFERENCIA
+   ======================================== */
+
+/* Botón para subir imagen de referencia con transición de color */
+.reference-upload-btn {
+    padding: $spacing-xs;
+    color: $text-disabled;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color $transition-base ease;
+}
+
+/* Efecto hover del botón de subida de referencia */
+.reference-upload-btn:hover {
+    color: $color-white;
+}
+
+/* Contenedor posicionado para preview de imagen de referencia */
+.reference-preview-container {
+    position: relative;
+}
+
+/* Imagen de referencia pequeña con borde violeta distintivo */
+.reference-preview-img {
+    height: $spacing-xl;
+    width: $spacing-xl;
+    object-fit: cover;
+    border-radius: $rounded-md;
+    border: $border-md solid $accent-purple;
+}
+
+/* Botón de eliminar imagen de referencia con fondo rojo */
+.reference-delete-btn {
+    position: absolute;
+    top: -$spacing-xs;
+    right: -$spacing-xs;
+    background-color: $color-error;
+    color: $color-white;
+    @include circular-button($spacing-md);
+    font-size: $font-xs;
+    line-height: 1;
+}
+
+/* ========================================
+   INPUTS Y CAMPOS DE FORMULARIO
+   ======================================== */
+
+.attribute-input {
+    @include input-base;
+}
+
+.predefined-value {
+    @include input-base;
+    background-color: $input-bg-disabled;
+    border-color: $border-primary;
+    color: $text-disabled;
+    font-style: italic;
+    
+    &:focus {
+        border-color: $border-primary;
+        box-shadow: none;
+    }
+}
+
+/* ========================================
+   INFORMACIÓN Y TIPS DE MODIFICACIÓN
+   ======================================== */
+
+/* Contenedor de información de modificaciones con layout horizontal */
+.modification-info {
+    @include info-container;
+    @include flex-row(center, space-between);
+    height: $height-sm;
+}
+
+/* Tip específico para modo base con color verde */
+.tip-base {
+    @include tip-text($accent-green-light);
+}
+
+/* Tip específico para modo completo con color azul */
+.tip-full {
+    @include tip-text($accent-blue-light);
+}
+
+/* ========================================
+   OVERLAYS Y INDICADORES DE CARGA
+   ======================================== */
+
+/* Overlay de carga que cubre completamente el contenedor padre */
+.loader-overlay {
+    @include full-overlay(rgba($bg-primary, 0.8));
+    @include flex-center;
+    border-radius: $rounded-xl;
+    z-index: 10;
+}
+
+/* Texto acompañante del loader con margen izquierdo */
+.loader-text {
+    margin-left: $spacing-md;
+}
+
+/* ========================================
+   SELECTOR DE CANTIDAD DE VARIACIONES
+   ======================================== */
+
+/* Contenedor principal del selector con layout horizontal balanceado */
+.variation-selector {
+    @include flex-row(center, space-between);
+    padding: $spacing-sm;
+    border-radius: $rounded-lg;
+    background-color: $glass-secondary;
+}
+
+/* Etiqueta del selector de variaciones con padding izquierdo */
+.variation-label {
+    color: $text-secondary;
+    font-weight: $font-medium;
+    padding-left: $spacing-sm;
+}
+
+/* Contenedor de botones de variación con espaciado mínimo */
+.variation-buttons {
+    @include flex-row(center, flex-start, $spacing-xs);
+}
+
+/* Botón individual de variación con ancho fijo y centrado */
+.variation-btn {
+    font-weight: $font-semibold;
+    padding: $spacing-sm 0;
+    border-radius: $rounded-md;
+    transition: all $transition-base ease;
+    width: $spacing-2xl;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+}
+
+/* Estado deshabilitado de botones de variación */
+.variation-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Botón de variación activo con fondo violeta */
+.variation-btn-active {
+    background-color: $accent-purple;
+    color: $color-white;
+}
+
+/* Botón de variación inactivo con fondo transparente */
+.variation-btn-inactive {
+    background-color: transparent;
+    color: $text-secondary;
+}
+
+/* Efecto hover para botones inactivos - fondo gris */
+.variation-btn-inactive:hover:not(:disabled) {
+    background-color: $surface-medium;
+}
+
+/* Spinner de carga dentro del botón de generación */
+.generate-spinner {
+    animation: spin 1s linear infinite;
+    border-radius: $rounded-full;
+    height: $height-sm;
+    width: $height-sm;
+    border-bottom: $border-md solid $color-white;
+}
+
+/* ========================================
+   SECCIÓN DE RESULTADOS Y GALERÍA
+   ======================================== */
+
+/* Contenedor principal de resultados con altura flexible */
+.results-container {
+    flex: 1;
+    @include flex-column;
+    overflow: hidden;
+    max-height: 100%;
+}
+
+/* Título de la sección de resultados fijo */
+.results-title {
+    font-size: $font-xl;
+    font-weight: $font-semibold;
+    margin-bottom: $spacing-md;
+    flex-shrink: 0;
+}
+
+/* Grid responsive de resultados con scroll vertical */
+.results-grid {
+    @include responsive-grid(1, 3, 3);
+    gap: $spacing-lg;
+    flex: 1;
+    overflow-y: auto;
+    padding-right: $spacing-sm;
+    margin-right: -$spacing-sm;
+    grid-auto-rows: min-content;
+    align-items: start;
+    
+    @media (min-width: $breakpoint-sm) {
+        gap: $spacing-md;
+    }
+}
+
+/* ========================================
+   BARRAS DE DESPLAZAMIENTO ESPECÍFICAS
+   ======================================== */
+
+/* Scrollbar personalizada para el grid de resultados */
+.results-grid::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* Track de la scrollbar de resultados */
+.results-grid::-webkit-scrollbar-track {
+    background: $scrollbar-track;
+    border-radius: $rounded-sm;
+}
+
+/* Thumb de la scrollbar de resultados con color violeta */
+.results-grid::-webkit-scrollbar-thumb {
+    background-color: $accent-purple;
+    border-radius: $rounded-sm;
+}
+
+/* Efecto hover del thumb de la scrollbar */
+.results-grid::-webkit-scrollbar-thumb:hover {
+    background-color: $accent-purple-light;
+}
+
+/* ========================================
+   ELEMENTOS DE RESULTADO INDIVIDUAL
+   ======================================== */
+
+/* Estado vacío de la galería de resultados */
+.results-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: $spacing-3xl 0;
+    color: $text-muted;
+    @include flex-center;
+    @include flex-column;
+    height: 100%;
+}
+
+/* Icono para el estado vacío de resultados */
+.results-empty-icon {
+    height: $icon-xl;
+    width: $icon-xl;
+    margin: 0 auto $spacing-md;
+    color: $border-secondary;
+}
+
+/* Elemento individual de resultado con aspecto cuadrado */
+.result-item {
+    background-color: $glass-secondary;
+    border-radius: $rounded-lg;
+    @include flex-center;
+    @include flex-column;
+    padding: $spacing-sm;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    @include aspect-square;
+    flex-shrink: 0;
+}
+
+/* Contenido interno del elemento de resultado */
+.result-content {
+    width: 100%;
+    height: 100%;
+    @include flex-center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Imagen del resultado con ajuste de contenido */
+.result-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: $rounded-md;
+    cursor: pointer;
+}
+
+/* Acciones flotantes sobre cada resultado (solo visibles en hover) */
+.result-actions {
+    position: absolute;
+    top: $spacing-sm;
+    right: $spacing-sm;
+    @include flex-column;
+    gap: $spacing-sm;
+    transition: opacity $transition-base ease;
+    opacity: 0;
+}
+
+/* Mostrar acciones al hacer hover sobre el elemento de resultado */
+.result-item:hover .result-actions {
+    opacity: 1;
+}
+
+/* Botones de acción individuales con fondo semi-transparente */
+.result-btn {
+    background-color: rgba(0, 0, 0, 0.6);
+    color: $color-white;
+    padding: $spacing-xs;
+    border-radius: $rounded-full;
+    border: none;
+    cursor: pointer;
+    transition: background-color $transition-base ease;
+}
+
+/* Efecto hover de los botones de acción */
+.result-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Mensaje de error en elementos de resultado */
+.result-error {
+    color: $color-error-light;
+    font-size: $font-xs;
+    padding: $spacing-xs;
+}
+
+/* ========================================
+   SISTEMA DE MODALES Y OVERLAY
+   ======================================== */
+
+/* Fondo oscuro del modal que cubre toda la pantalla */
+.modal-backdrop {
+    @include modal-container;
+    background-color: rgba(0, 0, 0, 0.8);
+    cursor: pointer;
+}
+
+/* Botones de navegación del modal (anterior/siguiente) */
+.modal-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.2);
+    color: $color-white;
+    @include circular-button($icon-xl);
+    z-index: 51;
+    transition: background-color $transition-base ease;
+}
+
+/* Efecto hover de los botones de navegación */
+.modal-nav-btn:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Botón anterior posicionado a la izquierda */
+.modal-prev-btn {
+    left: $spacing-md;
+}
+
+/* Botón siguiente posicionado a la derecha */
+.modal-next-btn {
+    right: $spacing-md;
+}
+
+/* Contenedor del contenido del modal */
+.modal-content {
+    position: relative;
+    max-width: $container-xl;
+    max-height: 100%;
+}
+
+/* Imagen principal del modal con restricciones de tamaño */
+.modal-image {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: $rounded-lg;
+}
+
+/* Botón de cerrar modal posicionado fuera del contenido */
+.modal-close-btn {
+    position: absolute;
+    top: -$spacing-sm;
+    right: -$spacing-sm;
+    background-color: $color-white;
+    color: $color-black;
+    @include circular-button($spacing-xl);
+    font-size: $font-lg;
+    line-height: 1;
+    z-index: 51;
+}
+
+/* ========================================
+   NOTIFICACIONES TOAST
+   ======================================== */
+
+/* Notificación toast fija en la esquina inferior derecha */
+.toast {
+    position: fixed;
+    bottom: $spacing-lg;
+    right: $spacing-lg;
+    background-color: $color-error;
+    color: $color-white;
+    padding: $spacing-sm $spacing-md;
+    border-radius: $rounded-lg;
+    box-shadow: $shadow-lg;
+    z-index: 50;
+    transition: opacity $transition-base ease;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ========================================
+   SUGERENCIAS FLOTANTES ANIMADAS
+   ======================================== */
+
+/* Sugerencia flotante principal con efectos de cristal y animaciones */
+.floating-suggestion {
+    position: fixed;
+    top: 160px;
+    right: 50px;
+    max-width: 400px;
+    background: linear-gradient(135deg, rgba($color-warning, 0.1) 0%, rgba($accent-orange, 0.1) 100%);
+    backdrop-filter: blur(20px);
+    border: $border-thin solid rgba($color-warning, 0.3);
+    border-radius: $rounded-xl;
+    padding: $spacing-lg;
+    box-shadow: $shadow-2xl;
+    z-index: 1000;
+    animation: slideInRight 0.5s ease-out, pulse 3s ease-in-out infinite;
+    transform-origin: top right;
+}
+
+/* Contenido interno de la sugerencia flotante */
+.floating-suggestion-content {
+    position: relative;
+}
+
+/* Botón de cerrar la sugerencia flotante con gradiente dorado */
+.floating-suggestion-close {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    background: linear-gradient(135deg, rgba($color-warning, 0.9) 0%, rgba($color-warning-light, 0.9) 100%);
+    color: $color-white;
+    border: $border-md solid rgba(255, 255, 255, 0.2);
+    @include circular-button($spacing-lg);
+    transition: all $transition-base ease;
+    z-index: 1001;
+    box-shadow: $shadow-md;
+}
+
+/* Efecto hover del botón de cerrar con gradiente rojo */
+.floating-suggestion-close:hover {
+    background: linear-gradient(135deg, rgba($color-error, 1) 0%, rgba($color-error-dark, 1) 100%);
+    transform: scale(1.1);
+    box-shadow: 0 8px 10px -3px rgba($color-error-light, 0.4), 0 4px 6px -2px rgba($color-error-dark, 0.3);
+}
+
+/* ========================================
+   ANIMACIONES PERSONALIZADAS
+   ======================================== */
+
+/* Animación de entrada desde la derecha */
+@keyframes slideInRight {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Animación de pulso suave con cambio de sombra */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: $shadow-2xl;
+    }
+    50% {
+        transform: scale(1.02);
+        box-shadow: 0 25px 30px -5px rgba($color-warning, 0.2), 0 15px 15px -5px rgba($accent-orange, 0.1);
+    }
+}
+
+/* ========================================
+   RESPONSIVE DESIGN PARA MÓVILES
+   ======================================== */
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: $breakpoint-sm) {
+    .floating-suggestion {
+        top: 70px;
+        right: $spacing-xs;
+        left: $spacing-xs;
+        max-width: none;
+    }
+}

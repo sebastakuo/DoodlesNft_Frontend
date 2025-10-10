@@ -1,0 +1,129 @@
+// ============================================
+// LAYOUT TRES COLUMNAS - CREATOR ESPECÍFICO
+// ============================================
+
+// Layout principal de 3 columnas para Creator
+.three-column-layout {
+  @include three-column-layout;
+}
+
+// Columna de subida de archivos (izquierda)
+.upload-column {
+  grid-column: 1;
+  @include flex-column;
+  gap: $spacing-lg;
+  
+  @include tablet {
+    grid-column: 1;
+    grid-row: 1;
+  }
+}
+
+// Columna de atributos (centro)
+.attributes-column {
+  grid-column: 2;
+  @include flex-column;
+  gap: $spacing-lg;
+  
+  @include tablet {
+    grid-column: 1;
+    grid-row: 2;
+  }
+}
+
+// Columna de resultados (derecha)
+.results-column {
+  grid-column: 3;
+  @include flex-column;
+  gap: $spacing-lg;
+  
+  @include tablet {
+    grid-column: 1;
+    grid-row: 3;
+  }
+}
+
+// Secciones dentro de cada columna
+.column-section {
+  @include card-base;
+  @include flex-column;
+  gap: $spacing-md;
+  flex: 1;
+  min-height: 200px;
+}
+
+// Encabezados de sección
+.section-header {
+  @include flex-between;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid $border-secondary;
+  margin-bottom: $spacing-md;
+  
+  h3 {
+    color: $text-primary;
+    font-weight: $font-semibold;
+    margin: 0;
+  }
+}
+
+// Contenido de sección
+.section-content {
+  @include flex-column;
+  gap: $spacing-md;
+  flex: 1;
+}
+
+// Layout específico para móvil
+@include mobile {
+  .three-column-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: $spacing-sm;
+    padding: $spacing-sm;
+  }
+  
+  .column-section {
+    min-height: auto;
+    padding: $spacing-md;
+  }
+}
+
+// Layout específico para tablet
+@include tablet {
+  .three-column-layout {
+    padding: $spacing-md;
+  }
+  
+  .column-section {
+    padding: $spacing-lg;
+  }
+}
+
+// Variantes de altura para columnas
+.column-full-height {
+  height: calc(100vh - #{$spacing-xl});
+}
+
+.column-auto-height {
+  height: auto;
+}
+
+// Estados especiales de columnas
+.column-loading {
+  opacity: 0.7;
+  pointer-events: none;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    @include spinner;
+  }
+}
+
+.column-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
