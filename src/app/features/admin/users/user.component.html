@@ -1,0 +1,26 @@
+<div class="user-container bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6">
+  <h2 class="title mb-6 text-blue-600 dark:text-blue-400 text-center">Usuarios</h2>
+  <table mat-table [dataSource]="dataSource" class="min-w-full border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+    <ng-container matColumnDef="Id">
+  <th mat-header-cell *matHeaderCellDef class="bg-blue-600 dark:bg-blue-800 text-white px-4 py-2 text-center">Id</th>
+  <td mat-cell *matCellDef="let row" class="px-4 py-2 text-gray-700 dark:text-gray-200 text-center">{{ row.Id }}</td>
+    </ng-container>
+    <ng-container matColumnDef="DiscordId">
+  <th mat-header-cell *matHeaderCellDef class="bg-blue-600 dark:bg-blue-800 text-white px-4 py-2 text-center">Usuario</th>
+  <td mat-cell *matCellDef="let row" class="px-4 py-2 text-gray-700 dark:text-gray-200 text-center">{{ row.DiscordId }}</td>
+    </ng-container>
+    <ng-container matColumnDef="Credits">
+  <th mat-header-cell *matHeaderCellDef class="bg-blue-600 dark:bg-blue-800 text-white px-4 py-2 text-center">Créditos</th>
+  <td mat-cell *matCellDef="let row" class="px-4 py-2 text-gray-700 dark:text-gray-200 text-center">{{ row.Credits }}</td>
+    </ng-container>
+    <ng-container matColumnDef="Created_At">
+      <th mat-header-cell *matHeaderCellDef class="bg-blue-600 dark:bg-blue-800 text-white px-4 py-2 text-center">Fecha Creación</th>
+      <td mat-cell *matCellDef="let user" class="px-4 py-2 text-gray-700 dark:text-gray-200 text-center">
+        {{ user.Created_At | date:'dd/MM/yyyy' }}
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns" class=""></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover:bg-blue-50 dark:hover:bg-blue-900 transition-colors"></tr>
+  </table>
+  <div *ngIf="dataSource?.data?.length === 0" class="mt-4 text-gray-500 dark:text-gray-400">No hay usuarios para mostrar.</div>
+</div>
